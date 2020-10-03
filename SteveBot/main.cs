@@ -7,6 +7,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Discord.Commands;
 
 namespace SteveBot
 {
@@ -16,6 +17,7 @@ namespace SteveBot
             => new main().MainAsync().GetAwaiter().GetResult();
 
         private DiscordSocketClient _client;
+
 
         public async Task MainAsync()
         {
@@ -27,17 +29,11 @@ namespace SteveBot
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
 
-            await Task.Run(Hello);
             await Task.Delay(-1);
         }
         private Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());
-            return Task.CompletedTask;
-        }
-        private Task Hello()
-        {
-            Console.WriteLine("Hello!");
             return Task.CompletedTask;
         }
     }
