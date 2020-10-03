@@ -2,12 +2,6 @@
 using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
-using System.IO;
-
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Discord.Commands;
 
 namespace SteveBot
 {
@@ -15,7 +9,6 @@ namespace SteveBot
     {
         public static void Main(string[] args)
             => new main().MainAsync().GetAwaiter().GetResult();
-
         private DiscordSocketClient _client;
 
 
@@ -28,7 +21,7 @@ namespace SteveBot
 
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
-
+            
             await Task.Delay(-1);
         }
         private Task Log(LogMessage msg)

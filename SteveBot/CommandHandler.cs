@@ -1,11 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SteveBot
@@ -14,6 +10,11 @@ namespace SteveBot
     {
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
+        /// <summary>
+        /// Takes client and commands
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="commands"></param>
         public CommandHandler(DiscordSocketClient client, CommandService commands)
         {
             _commands = commands;
@@ -30,7 +31,7 @@ namespace SteveBot
         private async Task HandleCommandAsync(SocketMessage messageParam)
         {
             //Stores the message in a variable to be used
-            var message = messageParam as SocketUserMessage;
+            SocketUserMessage message = messageParam as SocketUserMessage;
             if (message == null)
                 return;
 
