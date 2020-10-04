@@ -60,16 +60,28 @@ namespace SteveBot
         private async Task HandleCommandAsync(SocketMessage arg)
         {
             var message = arg as SocketUserMessage;
-            var context = new SocketCommandContext(_client, message);
-            if (message.Author.IsBot)
-                return;
-
             int argPos = 0;
-            if (message.HasStringPrefix("!", ref argPos))
+            if (message.HasStringPrefix("!", ref argPos)
+             || message.Content.ToLower() == "ping" 
+             || message.Content.ToLower() == "help"
+             || message.Content.ToLower() == "calculator")
             {
+                var context = new SocketCommandContext(_client, message);
+                if (message.Author.IsBot)
+                    return;
+
                 var result = await _commands.ExecuteAsync(context, argPos, _services);
                 if (!result.IsSuccess)
+                {
                     Console.WriteLine(result.ErrorReason);
+                    await message.Channel.SendMessageAsync(result.ErrorReason);
+                }
+                if (result.Error.Equals(CommandError.UnmetPrecondition))
+                    await message.Channel.SendMessageAsync(result.ErrorReason);
+            }
+            else
+            {
+                return;
             }
         }
     }
