@@ -10,11 +10,7 @@ namespace SteveBot
     {
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
-        /// <summary>
-        /// Takes client and commands
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="commands"></param>
+
         public CommandHandler(DiscordSocketClient client, CommandService commands)
         {
             _commands = commands;
