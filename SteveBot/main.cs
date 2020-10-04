@@ -35,13 +35,11 @@ namespace SteveBot
             var token = File.ReadAllText("../../auth.json");
 
             _client.Log += _client_Log;
-
             await RegisterCommandsAsync();
 
             //logs the bot into discord
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
-
             //tells the bot to wait for input
             await Task.Delay(-1);
         }
@@ -70,7 +68,7 @@ namespace SteveBot
 
             //Checks for prefix or specified passthrough commands
             if (message.HasStringPrefix("!", ref argPos)
-             || message.Content.ToLower() == "ping" 
+             || message.Content.ToLower() == "ping"
              || message.Content.ToLower() == "help"
              || message.Content.ToLower() == "calculator")
             {
