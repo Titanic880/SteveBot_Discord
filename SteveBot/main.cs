@@ -79,7 +79,7 @@ namespace SteveBot
              || message.Content.ToLower() == "calculator")
             {
                 //Saves user Input to a debug file for later inspection
-                SteveBot.Modules.CommandFunctions.AddUsercommand(message.Content, message.Author.ToString(), message.CreatedAt.DateTime);
+                Modules.CommandFunctions.AddUsercommand(message);
                 //generates an object from the user message
                 var context = new SocketCommandContext(_client, message);
 
@@ -99,7 +99,10 @@ namespace SteveBot
             }
             //if something fails the Prefix check it just returns
             else
+            {
+                if(!message.Author.IsBot) Modules.CommandFunctions.UserMessages(message);
                 return;
+            }
         }
     }
 }

@@ -30,7 +30,6 @@ namespace SteveBot.Modules
             Embed embed = EmbedBuilder.Build();
             await ReplyAsync(embed: embed);
         }
-
         [Command("calculator")]
         public async Task calc()
         {
@@ -95,10 +94,13 @@ namespace SteveBot.Modules
         {
             await ReplyAsync("You Slapped " + user.Mention);
         }
-
+        [Command("roll")]
+        public async Task Roll()
+        {
+            await ReplyAsync($"You rolled a  {CommandFunctions.DiceRoll()}");
+        }
 
         #endregion Standard Commands
-
         #region Media
         [Command("addlink")]
         public async Task AddLink(string link)
@@ -127,7 +129,6 @@ namespace SteveBot.Modules
                 await ReplyAsync($"Your index exceeds the size of the list, the list is currently: {input} Links long");
                 return;
             }
-            
             await ReplyAsync(CommandFunctions.LinksPub[input-1]);
         }
         [Command("LLL")]
@@ -148,15 +149,12 @@ namespace SteveBot.Modules
             
             CommandFunctions.RemoveLink(input-1);
             await ReplyAsync("Link removed from list!");
-           
         }
         #endregion Media
-
         #region TEST
         [Command("test")]
         public async Task test()
         {
-
 
             await ReplyAsync("");
         }
@@ -237,7 +235,6 @@ namespace SteveBot.Modules
             await ReplyAsync(embed: embed);
         }
         #endregion Bans
-
         #region Calc    
         [Command("add")]
         public async Task Addition(double Num1, double Num2)
