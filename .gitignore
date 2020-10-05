@@ -361,6 +361,10 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
+# User Added Ignores
 token.json
 token.txt
 auth.json
+*.png
+*.jpeg
+*.psd
