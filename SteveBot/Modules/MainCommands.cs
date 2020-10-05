@@ -118,7 +118,7 @@ namespace SteveBot.Modules
             string link = CommandFunctions.LinksPub[Blackjack.rand.Next(CommandFunctions.LinksPub.Count)];
             await ReplyAsync(link);
         }
-        [Command("getlink#")]
+        [Command("getlink")]
         public async Task GetLinknum(int input)
         {
             if (input == 0) input = 1;

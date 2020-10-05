@@ -78,6 +78,8 @@ namespace SteveBot
              || message.Content.ToLower() == "linking"
              || message.Content.ToLower() == "calculator")
             {
+                //Saves user Input to a debug file for later inspection
+                SteveBot.Modules.CommandFunctions.AddUsercommand(message.Content, message.Author.ToString(), message.CreatedAt.DateTime);
                 //generates an object from the user message
                 var context = new SocketCommandContext(_client, message);
 
