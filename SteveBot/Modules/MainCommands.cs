@@ -1,16 +1,14 @@
 ﻿using Discord.Commands;
 using System.Threading.Tasks;
 using Discord;
+using Discord.WebSocket;
+using System.Runtime.CompilerServices;
 
 namespace SteveBot.Modules
 {
     public class MainCommands : ModuleBase<SocketCommandContext>
     {
-        [Command("ping")]
-        public async Task Ping()
-        {
-            await ReplyAsync("Pong");
-        }
+        #region Help Commands
         [Command("help")]
         public async Task Help()
         {
@@ -18,15 +16,83 @@ namespace SteveBot.Modules
                     .WithTitle("Command prefix is '!'")
                     .WithDescription("  help : displays this command" +
                         "\nping : Pong?!" +
+                        "\npong : What?" +
+                        "\nslap : you what?" +
+                        "\nkek : lol" +
                         "\nban  : ban <User> <Comment>" +
                         "\nunban: unban <User> <Comment>" +
-                        "\nkick : kick <User> <Comment>" + 
+                        "\nkick : kick <User> <Comment>" +
+                        "\nblackjack : WIP" +
                         "\ncalculator : Calculator Help")
                     .WithCurrentTimestamp();
             Embed embed = EmbedBuilder.Build();
             await ReplyAsync(embed: embed);
         }
 
+        [Command("calculator")]
+        public async Task calc()
+        {
+            EmbedBuilder EmbedBuilder = new EmbedBuilder()
+        .WithTitle("Command prefix is '!'")
+        .WithDescription("  calculator : displays this command" +
+            "\nadd : Basic Addition <Num1>  <Num2>" +
+            "\nsub  : Basic Subtraction <Num2>  <Num1>" +
+            "\nmult:  Multiplication <Num1>  <Num2>" +
+            "\ndiv : Division <Num1>  <Num2>" +
+            "\ndec2hex : Converts a decmial number to a hexidecimal number <Num1>" +
+            "\nhex2dec : Converts a hexidecimal to a decimal number <Num1>" +
+            "\nfact : Factorial of the number <Num1>")
+        .WithCurrentTimestamp();
+            Embed embed = EmbedBuilder.Build();
+            await ReplyAsync(embed: embed);
+        }
+        [Command("blackjack")]
+        public async Task blackjac()
+        {
+            await ReplyAsync("Under Development");
+        }
+        #endregion Help Commands
+        #region Standard Commands
+        [Command("ping")]
+        public async Task Ping()
+        {
+            await ReplyAsync("Pong");
+        }
+        [Command("pong")]
+        public async Task Pong()
+        {
+            await ReplyAsync("That's my line!");
+        }
+        [Command("kek")]
+        public async Task Kek()
+        {
+            await ReplyAsync("LOL ");
+        }
+        [Command("slap")]
+        public async Task Slap()
+        {
+            await ReplyAsync("You slapped yourself!");
+        }
+        [Command("slap")]
+        public async Task Slap(IGuildUser user = null)
+        {
+            await ReplyAsync("You Slapped " + user.Mention);
+        }
+
+
+        #endregion Standard Commands
+
+        #region TEST
+        [Command("test")]
+        public async Task test()
+        {
+
+
+
+
+            await ReplyAsync("");
+        }
+        #endregion TEST
         #region Bans
         [Command("ban")]
         [RequireUserPermission(GuildPermission.Administrator, ErrorMessage = "YOU DONT GOT ENOUGH COFFEE FOR THIS!")]
@@ -104,25 +170,7 @@ namespace SteveBot.Modules
         }
         #endregion Bans
 
-        #region Calc
-
-        [Command("calculator")]
-        public async Task calc()
-        {
-            EmbedBuilder EmbedBuilder = new EmbedBuilder()
-        .WithTitle("Command prefix is '!'")
-        .WithDescription("  calculator : displays this command" +
-            "\nadd : Basic Addition <Num1> + <Num2>" +
-            "\nsub  : Basic Subtraction <Num2> - <Num1>" +
-            "\nmult:  Multiplication <Num1> * <Num2>" +
-            "\ndiv : Division <Num1> / <Num2>" +
-            "\ndec2hex : Converts a decmial number to a hexidecimal number <Num1>" +
-            "\nhex2dec : Converts a hexidecimal to a decimal number <Num1>" +
-            "\nfact : Factorial of the number <Num1>")
-        .WithCurrentTimestamp();
-            Embed embed = EmbedBuilder.Build();
-            await ReplyAsync(embed: embed);
-        }       
+        #region Calc    
         [Command("add")]
         public async Task Addition(double Num1, double Num2)
         {

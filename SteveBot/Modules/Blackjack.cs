@@ -40,7 +40,7 @@ namespace SteveBot.Modules
             if (user.IsBot)
                 return;
 
-
+            await ReplyAsync("");
         }
         Blackjack()
         {

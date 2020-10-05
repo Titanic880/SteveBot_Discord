@@ -65,7 +65,8 @@ namespace SteveBot
             //Stores user message and initilizes message position
             var message = arg as SocketUserMessage;
             int argPos = 0;
-
+            if (message == null)
+                return;
             //Checks for prefix or specified passthrough commands
             if (message.HasStringPrefix("!", ref argPos)
              || message.Content.ToLower() == "ping"
