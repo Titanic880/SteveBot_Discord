@@ -20,7 +20,7 @@ namespace SteveBot.Modules
                         "\npong : What?" +
                         "\nslap : you what?" +
                         "\nkek : lol" + 
-                        "\nroll : Rolls a 6 sided Die"+
+                        "\nroll : Rolls a 6 sided Die unless specified"+
                         "\nban  : ban <User> <Comment>" +
                         "\nunban: unban <User> <Comment>" +
                         "\nkick : kick <User> <Comment>" +"" +
@@ -98,6 +98,7 @@ namespace SteveBot.Modules
         {
             await ReplyAsync($"You rolled a  {CommandFunctions.DiceRoll(dice_size)}");
         }
+        
 
         #endregion Standard Commands
         #region Media
