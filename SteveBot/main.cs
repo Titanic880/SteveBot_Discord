@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using System.Linq;
 
 namespace SteveBot
 {
@@ -24,6 +25,10 @@ namespace SteveBot
         {
             _client = new DiscordSocketClient();
             _commands = new CommandService();
+            if (!File.Exists("../../Links.txt"))
+                File.Create("../../Links.txt").Close();
+            else
+                Modules.CommandFunctions.UpdateLinks(File.ReadAllLines("../../Links.txt").ToList<string>());
 
             //Not 100% sure what this does in its entirity; .AddSingleton == static
             _services = new ServiceCollection()
@@ -69,8 +74,8 @@ namespace SteveBot
                 return;
             //Checks for prefix or specified passthrough commands
             if (message.HasStringPrefix("!", ref argPos)
-             || message.Content.ToLower() == "ping"
              || message.Content.ToLower() == "help"
+             || message.Content.ToLower() == "linking"
              || message.Content.ToLower() == "calculator")
             {
                 //generates an object from the user message

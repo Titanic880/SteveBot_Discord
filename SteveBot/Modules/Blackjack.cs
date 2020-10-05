@@ -29,7 +29,7 @@ namespace SteveBot.Modules
     }
     public class Blackjack : ModuleBase<SocketCommandContext>
     { 
-        private static readonly Random rand = new Random();
+        public static readonly Random rand = new Random();
         private Pframe player;
         private Pframe dealer;
         private int[] Deck;

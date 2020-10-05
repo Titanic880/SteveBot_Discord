@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using System.Runtime.CompilerServices;
+using System;
 
 namespace SteveBot.Modules
 {
@@ -21,7 +22,8 @@ namespace SteveBot.Modules
                         "\nkek : lol" +
                         "\nban  : ban <User> <Comment>" +
                         "\nunban: unban <User> <Comment>" +
-                        "\nkick : kick <User> <Comment>" +
+                        "\nkick : kick <User> <Comment>" +"" +
+                        "\nlinking : Info list for links!"+
                         "\nblackjack : WIP" +
                         "\ncalculator : Calculator Help")
                     .WithCurrentTimestamp();
@@ -50,6 +52,21 @@ namespace SteveBot.Modules
         public async Task blackjac()
         {
             await ReplyAsync("Under Development");
+        }
+        [Command("linking")]
+        public async Task Linking()
+        {
+            EmbedBuilder EmbedBuilder = new EmbedBuilder()
+        .WithTitle("Command prefix is '!'")
+        .WithDescription("  linking : displays this command" +
+            "\naddlink : Adds a link to the list" +
+            "\nrandomlink : gets a random link out of the list" +
+            "\ngetlink# : pulls a link from the specific index" +
+            "\nLLL : returns length of the list" + 
+            "\ndellink : Removes link from the list")
+        .WithCurrentTimestamp();
+            Embed embed = EmbedBuilder.Build();
+            await ReplyAsync(embed: embed);
         }
         #endregion Help Commands
         #region Standard Commands
@@ -82,12 +99,63 @@ namespace SteveBot.Modules
 
         #endregion Standard Commands
 
+        #region Media
+        [Command("addlink")]
+        public async Task AddLink(string link)
+        {
+            string linktest = link.Substring(0, 5);
+            if (linktest.ToLower() != "https")
+            {
+                await ReplyAsync("Please provide a link with https at the beginning");
+            }
+            int tmp = CommandFunctions.AddLink(link);
+            await ReplyAsync($"Link added successfully and is #{tmp}");
+        }
+
+        [Command("randomlink")]
+        public async Task RandomLink()
+        {
+            string link = CommandFunctions.LinksPub[Blackjack.rand.Next(CommandFunctions.LinksPub.Count)];
+            await ReplyAsync(link);
+        }
+        [Command("getlink#")]
+        public async Task GetLinknum(int input)
+        {
+            if (input == 0) input = 1;
+            if(input > CommandFunctions.LinksPub.Count)
+            {
+                await ReplyAsync($"Your index exceeds the size of the list, the list is currently: {input} Links long");
+                return;
+            }
+            
+            await ReplyAsync(CommandFunctions.LinksPub[input-1]);
+        }
+        [Command("LLL")]
+        public async Task LinkListLength()
+        {
+            await ReplyAsync($"The list is: {CommandFunctions.LinksPub.Count} links long!!!");
+        }
+        [Command("dellink")]
+        public async Task DeleteLink(int input)
+        {
+            if (input == 0) input = 1;
+            if (input > CommandFunctions.LinksPub.Count)
+            {
+                await ReplyAsync($"Your index exceeds the size of the list, the list is currently: {input}" +
+                                  "\nLinks long");
+                return;
+            }
+            
+            CommandFunctions.RemoveLink(input-1);
+            await ReplyAsync("Link removed from list!");
+           
+        }
+        #endregion Media
+
         #region TEST
         [Command("test")]
         public async Task test()
         {
-
-
 
 
             await ReplyAsync("");

@@ -104,5 +104,8 @@
     <Compile Include="Modules\CommandFunctions.cs" />
     <Compile Include="Modules\MainCommands.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pictures\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
