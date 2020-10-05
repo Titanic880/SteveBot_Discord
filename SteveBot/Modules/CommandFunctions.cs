@@ -66,30 +66,10 @@ namespace SteveBot.Modules
             Five,
             Six
         }
-        public static string DiceRoll()
+        public static string DiceRoll(int dice_size)
         {
-            string output = "";
-            switch (Blackjack.rand.Next(6))
-            {
-                case 0:
-                    output = Dice.One.ToString();
-                    break;
-                case 1:
-                    output = Dice.Two.ToString();
-                    break;
-                case 2:
-                    output = Dice.Three.ToString();
-                    break;
-                case 3:
-                    output = Dice.Four.ToString();
-                    break;
-                case 4:
-                    output = Dice.Five.ToString();
-                    break;
-                case 5:
-                    output = Dice.Six.ToString();
-                    break;
-            }
+            string output = Blackjack.rand.Next(dice_size).ToString();
+
 
             return output;
         }

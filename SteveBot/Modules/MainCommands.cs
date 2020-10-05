@@ -19,7 +19,8 @@ namespace SteveBot.Modules
                         "\nping : Pong?!" +
                         "\npong : What?" +
                         "\nslap : you what?" +
-                        "\nkek : lol" +
+                        "\nkek : lol" + 
+                        "\nroll : Rolls a 6 sided Die"+
                         "\nban  : ban <User> <Comment>" +
                         "\nunban: unban <User> <Comment>" +
                         "\nkick : kick <User> <Comment>" +"" +
@@ -85,19 +86,17 @@ namespace SteveBot.Modules
             await ReplyAsync("LOL ");
         }
         [Command("slap")]
-        public async Task Slap()
-        {
-            await ReplyAsync("You slapped yourself!");
-        }
-        [Command("slap")]
         public async Task Slap(IGuildUser user = null)
         {
-            await ReplyAsync("You Slapped " + user.Mention);
+            if (user == null)
+                await ReplyAsync("You Slapped yourself!");
+            else
+                await ReplyAsync("You Slapped " + user.Mention);
         }
         [Command("roll")]
-        public async Task Roll()
+        public async Task Roll(int dice_size = 6)
         {
-            await ReplyAsync($"You rolled a  {CommandFunctions.DiceRoll()}");
+            await ReplyAsync($"You rolled a  {CommandFunctions.DiceRoll(dice_size)}");
         }
 
         #endregion Standard Commands
