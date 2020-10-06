@@ -83,7 +83,7 @@ namespace SteveBot.Modules
         [Command("kek")]
         public async Task Kek()
         {
-            await ReplyAsync("LOL ");
+            await ReplyAsync("LOL");
         }
         [Command("slap")]
         public async Task Slap(IGuildUser user = null)
@@ -96,7 +96,7 @@ namespace SteveBot.Modules
         [Command("roll")]
         public async Task Roll(int dice_size = 6)
         {
-            await ReplyAsync($"You rolled a  {CommandFunctions.DiceRoll(dice_size)}");
+            await ReplyAsync($"You rolled a  {CommandFunctions.DiceRoll(dice_size+1)}");
         }
         
 

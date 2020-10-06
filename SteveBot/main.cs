@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Linq;
+using System.Timers;
 
 namespace SteveBot
 {
@@ -25,8 +26,10 @@ namespace SteveBot
         {
             _client = new DiscordSocketClient();
             _commands = new CommandService();
-            if (!File.Exists("../../Links.txt"))
-                File.Create("../../Links.txt").Close();
+            if (!Directory.Exists("Files/"))
+                Directory.CreateDirectory("Files/");
+            if (!File.Exists("Files/Links.txt"))
+                File.Create("Files/Links.txt").Close();
             else
                 Modules.CommandFunctions.UpdateLinks(File.ReadAllLines("../../Links.txt").ToList<string>());
 
@@ -45,6 +48,13 @@ namespace SteveBot
             //logs the bot into discord
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
+
+            //Sets up a Timer so that the bot is acted on every hour
+            System.Timers.Timer wake = new System.Timers.Timer(3.6e+6);
+            wake.Elapsed += wake_Tick;
+            wake.AutoReset = true;
+            wake.Start();
+            
             //tells the bot to wait for input
             await Task.Delay(-1);
         }
@@ -56,6 +66,10 @@ namespace SteveBot
             return Task.CompletedTask;
         }
 
+        private void wake_Tick(Object source, ElapsedEventArgs e)
+        {
+            Console.WriteLine("Wakeup Stevebot! the coffee is calling to you!");
+        }
         //Adds commands to the bot
         public async Task RegisterCommandsAsync()
         {
@@ -79,7 +93,7 @@ namespace SteveBot
              || message.Content.ToLower() == "calculator")
             {
                 //Saves user Input to a debug file for later inspection
-                Modules.CommandFunctions.AddUsercommand(message);
+                Modules.CommandFunctions.UserCommand(message);
                 //generates an object from the user message
                 var context = new SocketCommandContext(_client, message);
 
