@@ -75,7 +75,6 @@ namespace SteveBot.Modules
             string output = main.rand.Next(dice_size).ToString();
             return output;
         }
-
         #endregion DiceGames
     }
 }

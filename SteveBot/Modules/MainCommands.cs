@@ -5,7 +5,7 @@ using Discord.WebSocket;
 using System.Runtime.CompilerServices;
 using System;
 
-namespace SteveBot.Modules
+namespace SteveBot.Modules.BlackJack
 {
     public class MainCommands : ModuleBase<SocketCommandContext>
     {
@@ -49,7 +49,7 @@ namespace SteveBot.Modules
             await ReplyAsync(embed: embed);
         }
         [Command("blackjack")]
-        public async Task blackjac()
+        public async Task BJ()
         {
             await ReplyAsync("Under Development");
         }
@@ -314,5 +314,36 @@ namespace SteveBot.Modules
             await ReplyAsync(embed: embed);
         }
         #endregion Calc
+        #region BlackJack
+
+        [Command("blackjack deal")]
+        public async Task BlackJackDeal(IGuildUser user = null)
+        {
+            if (user.IsBot)
+                return;
+
+            await ReplyAsync("This does nothing");
+        }
+        [Command("blackjack Autoplay")]
+        public async Task BJAutoPlay(int games = 1)
+        {
+            int player;
+            int dealer;
+
+            if(games == 1)
+            {
+                await ReplyAsync("");
+            }
+            else
+            {
+                for(int i = 0; i < games; i++)
+                {
+
+                }
+            }
+
+        }
+
+        #endregion BlackJack
     }
 }
