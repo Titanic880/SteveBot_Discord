@@ -9,9 +9,9 @@ namespace SteveBot.Modules
         #region Links
         private static List<string> Links;
         public static List<string> LinksPub { get { return Links; } }
-        private static string linkPath = "Files/Links.txt";
-        private static string usercommandsPath = "Files/UserCommands.txt";
-        private static string usermessagesPath = "Files/UserMessages.txt";
+        public const string linkPath = "Files/Links.txt";
+        public const string usercommandsPath = "Files/UserCommands.txt";
+        public const string usermessagesPath = "Files/UserMessages.txt";
 
         public static void UpdateLinks(List<string> strlst)
         {
@@ -39,9 +39,6 @@ namespace SteveBot.Modules
         #region Logging
         public static void UserCommand(Discord.WebSocket.SocketUserMessage message)
         {
-            //Checks for file
-            if (!File.Exists(usercommandsPath))
-                File.Create(usercommandsPath).Close();
             //Writes to file
             StreamWriter sW = File.AppendText(usercommandsPath);
             sW.WriteLine($"{message.Content}, {message.Author}, {message.CreatedAt.DateTime}");
@@ -49,9 +46,6 @@ namespace SteveBot.Modules
         }
         public static void UserMessages(Discord.WebSocket.SocketUserMessage message)
         {
-            //Checks for file
-            if (!File.Exists(usermessagesPath))
-                File.Create(usermessagesPath).Close();
             //Writes to file
             StreamWriter sW = File.AppendText(usermessagesPath);
             sW.WriteLine($"{message.Content}, {message.Author}, {message.CreatedAt.DateTime}");
@@ -61,7 +55,24 @@ namespace SteveBot.Modules
         #region DiceGames
         public static string DiceRoll(int dice_size)
         {
-            string output = Blackjack.rand.Next(dice_size).ToString();
+            switch (dice_size)
+            {
+                case 4:
+                    return main.rand.Next(4).ToString();
+                case 6:
+                    return main.rand.Next(6).ToString();
+                case 8:
+                    return main.rand.Next(8).ToString();
+                case 10:
+                    return main.rand.Next(10).ToString();
+                case 12:
+                    return main.rand.Next(6).ToString();
+                case 20:
+                    return main.rand.Next(20).ToString();
+                case 100:
+                    return main.rand.Next(100).ToString();
+            }
+            string output = main.rand.Next(dice_size).ToString();
             return output;
         }
 

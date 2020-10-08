@@ -8,11 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Linq;
 using System.Timers;
+using SteveBot.Modules;
 
 namespace SteveBot
 {
     class main
     {
+        public static readonly Random rand = new Random();
         //the bot cannot run within a static main function, so we build one with
         //Async and awaiter built into it for ease of use as a bot
         public static void Main(string[] args)
@@ -26,12 +28,9 @@ namespace SteveBot
         {
             _client = new DiscordSocketClient();
             _commands = new CommandService();
-            if (!Directory.Exists("Files/"))
-                Directory.CreateDirectory("Files/");
-            if (!File.Exists("Files/Links.txt"))
-                File.Create("Files/Links.txt").Close();
-            else
-                Modules.CommandFunctions.UpdateLinks(File.ReadAllLines("../../Links.txt").ToList<string>());
+
+            //Checks to see if all nessecary directories exist, if not it generates them.
+            File_Check();
 
             //Not 100% sure what this does in its entirity; .AddSingleton == static
             _services = new ServiceCollection()
@@ -66,9 +65,27 @@ namespace SteveBot
             return Task.CompletedTask;
         }
 
+        //Checks all Files on runtime
+        private void File_Check()
+        {
+            if (!Directory.Exists("Files/"))
+                Directory.CreateDirectory("Files/");
+            
+            if (!File.Exists(CommandFunctions.linkPath))
+                File.Create(CommandFunctions.linkPath).Close();
+            else
+                Modules.CommandFunctions.UpdateLinks(File.ReadAllLines("../../Links.txt").ToList<string>());
+
+            if (!File.Exists(CommandFunctions.usercommandsPath))
+                File.Create(CommandFunctions.usercommandsPath).Close();
+            
+            if (!File.Exists(CommandFunctions.usermessagesPath))
+                File.Create(CommandFunctions.usermessagesPath).Close();
+        }
         private void wake_Tick(Object source, ElapsedEventArgs e)
         {
             Console.WriteLine("Wakeup Stevebot! the coffee is calling to you!");
+            
         }
         //Adds commands to the bot
         public async Task RegisterCommandsAsync()

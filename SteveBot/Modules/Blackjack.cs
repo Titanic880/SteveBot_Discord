@@ -29,7 +29,6 @@ namespace SteveBot.Modules
     }
     public class Blackjack : ModuleBase<SocketCommandContext>
     { 
-        public static readonly Random rand = new Random();
         private Pframe player;
         private Pframe dealer;
         private int[] Deck;
@@ -50,13 +49,13 @@ namespace SteveBot.Modules
         {
             //Pick a random card from the deck
             //to swap with another card
-            int num1 = rand.Next(0, 52);
-            int num2 = rand.Next(0, 52);
+            int num1 = main.rand.Next(0, 52);
+            int num2 = main.rand.Next(0, 52);
             //Do this a lot to try and ensure randomness
             for (int i = 0; i < 10000; i++)
             {
-                num1 = rand.Next(0, 52);
-                num2 = rand.Next(0, 52);
+                num1 = main.rand.Next(0, 52);
+                num2 = main.rand.Next(0, 52);
                 //Stashing the old card in memory
                 //Card tmp = carddeck.Deck[num1];
                 //lstCards[num1] = lstCards[num2];

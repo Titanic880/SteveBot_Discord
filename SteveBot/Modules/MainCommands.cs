@@ -20,7 +20,7 @@ namespace SteveBot.Modules
                         "\npong : What?" +
                         "\nslap : you what?" +
                         "\nkek : lol" + 
-                        "\nroll : Rolls a 6 sided Die unless specified"+
+                        "\nroll : Rolls a specified dice; 4,6,8,10,20,100 (default:6)"+
                         "\nban  : ban <User> <Comment>" +
                         "\nunban: unban <User> <Comment>" +
                         "\nkick : kick <User> <Comment>" +"" +
@@ -117,7 +117,7 @@ namespace SteveBot.Modules
         [Command("randomlink")]
         public async Task RandomLink()
         {
-            string link = CommandFunctions.LinksPub[Blackjack.rand.Next(CommandFunctions.LinksPub.Count)];
+            string link = CommandFunctions.LinksPub[main.rand.Next(CommandFunctions.LinksPub.Count)];
             await ReplyAsync(link);
         }
         [Command("getlink")]
