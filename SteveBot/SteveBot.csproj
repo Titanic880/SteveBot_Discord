@@ -97,7 +97,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="main.cs" />
-    <Compile Include="Modules\Blackjack.cs" />
+    <Compile Include="Modules\BlackJack\Blackjack.cs" />
+    <Compile Include="Modules\BlackJack\DeckStruct.cs" />
+    <Compile Include="Modules\BlackJack\Player.cs" />
     <Compile Include="Modules\Calculator.cs" />
     <Compile Include="Modules\CommandFunctions.cs" />
     <Compile Include="Modules\MainCommands.cs" />

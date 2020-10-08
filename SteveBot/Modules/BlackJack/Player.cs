@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SteveBot.Modules.BlackJack
 {
-    class Player
+    public class Player
     {
+        #region Variables
         private Card DealHidden = null;
         private bool isdealer = false;
         public bool IsDealer { get { return isdealer; } }
-        private List<Card> deck = new List<Card>();
-        
+        private List<Card> deck = new List<Card>(); 
         public int CardValue
         {
             get
@@ -45,6 +45,12 @@ namespace SteveBot.Modules.BlackJack
                     return High;
             }
         }
+        #endregion Variables
+        #region Logic
+        public Player(bool dealer = false)
+        {
+            this.isdealer = dealer;
+        }
         public void TakeCard(Card card)
         {
             if (IsDealer && DealHidden == null)
@@ -53,10 +59,7 @@ namespace SteveBot.Modules.BlackJack
                 deck.Add(card);
         }
 
-        public Player(bool dealer = false)
-        {
-            this.isdealer = dealer;
-        }
+
         public bool turn(Player opponent)
         {
             if (this.IsDealer)
@@ -82,7 +85,7 @@ namespace SteveBot.Modules.BlackJack
                 return false;
             else
                 return true;
-
         }
+        #endregion Logic
     }
 }

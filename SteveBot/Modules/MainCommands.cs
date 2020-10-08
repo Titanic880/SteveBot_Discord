@@ -19,12 +19,12 @@ namespace SteveBot.Modules.BlackJack
                         "\nping : Pong?!" +
                         "\npong : What?" +
                         "\nslap : you what?" +
-                        "\nkek : lol" + 
-                        "\nroll : Rolls a specified dice; 4,6,8,10,20,100 (default:6)"+
+                        "\nkek : lol" +
+                        "\nroll : Rolls a specified dice; 4,6,8,10,20,100 (default:6)" +
                         "\nban  : ban <User> <Comment>" +
                         "\nunban: unban <User> <Comment>" +
-                        "\nkick : kick <User> <Comment>" +"" +
-                        "\nlinking : Info list for links!"+
+                        "\nkick : kick <User> <Comment>" + "" +
+                        "\nlinking : Info list for links!" +
                         "\nblackjack : WIP" +
                         "\ncalculator : Calculator Help")
                     .WithCurrentTimestamp();
@@ -62,7 +62,7 @@ namespace SteveBot.Modules.BlackJack
             "\naddlink : Adds a link to the list" +
             "\nrandomlink : gets a random link out of the list" +
             "\ngetlink# : pulls a link from the specific index" +
-            "\nLLL : returns length of the list" + 
+            "\nLLL : returns length of the list" +
             "\ndellink : Removes link from the list")
         .WithCurrentTimestamp();
             Embed embed = EmbedBuilder.Build();
@@ -96,9 +96,9 @@ namespace SteveBot.Modules.BlackJack
         [Command("roll")]
         public async Task Roll(int dice_size = 6)
         {
-            await ReplyAsync($"You rolled a  {CommandFunctions.DiceRoll(dice_size+1)}");
+            await ReplyAsync($"You rolled a  {CommandFunctions.DiceRoll(dice_size + 1)}");
         }
-        
+
 
         #endregion Standard Commands
         #region Media
@@ -124,12 +124,12 @@ namespace SteveBot.Modules.BlackJack
         public async Task GetLinknum(int input)
         {
             if (input == 0) input = 1;
-            if(input > CommandFunctions.LinksPub.Count)
+            if (input > CommandFunctions.LinksPub.Count)
             {
                 await ReplyAsync($"Your index exceeds the size of the list, the list is currently: {input} Links long");
                 return;
             }
-            await ReplyAsync(CommandFunctions.LinksPub[input-1]);
+            await ReplyAsync(CommandFunctions.LinksPub[input - 1]);
         }
         [Command("LLL")]
         public async Task LinkListLength()
@@ -146,8 +146,8 @@ namespace SteveBot.Modules.BlackJack
                                   "\nLinks long");
                 return;
             }
-            
-            CommandFunctions.RemoveLink(input-1);
+
+            CommandFunctions.RemoveLink(input - 1);
             await ReplyAsync("Link removed from list!");
         }
         #endregion Media
@@ -299,7 +299,7 @@ namespace SteveBot.Modules.BlackJack
             EmbedBuilder EmbedBuilder = new EmbedBuilder()
                  .WithDescription($"{Num1} = {output}")
                  .WithCurrentTimestamp();
-             Embed embed = EmbedBuilder.Build();
+            Embed embed = EmbedBuilder.Build();
             await ReplyAsync(embed: embed);
         }
         [Command("fact")]
@@ -327,20 +327,29 @@ namespace SteveBot.Modules.BlackJack
         [Command("blackjack Autoplay")]
         public async Task BJAutoPlay(int games = 1)
         {
-            int player;
-            int dealer;
-
-            if(games == 1)
+            BlackJack.Blackjack bj;
+            string output = "";
+            if (games == 1)
             {
-                await ReplyAsync("");
+                bj = new BlackJack.Blackjack();
+                Player winner = bj.playgame();
+                output = bj.Win();
             }
             else
             {
-                for(int i = 0; i < games; i++)
+                for (int i = 0; i < games; i++)
                 {
 
                 }
             }
+
+            EmbedBuilder EmbedBuilder = new EmbedBuilder()
+                .WithTitle("Command prefix is '!'")
+                .WithDescription(output)
+                .WithCurrentTimestamp();
+            Embed embed = EmbedBuilder.Build();
+
+            await ReplyAsync("");
 
         }
 
