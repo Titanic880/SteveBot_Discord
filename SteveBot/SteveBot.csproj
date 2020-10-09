@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="main.cs" />
+    <Compile Include="Modules\BlackJack\BJSIM.cs" />
     <Compile Include="Modules\BlackJack\Blackjack.cs" />
     <Compile Include="Modules\BlackJack\DeckStruct.cs" />
     <Compile Include="Modules\BlackJack\Player.cs" />

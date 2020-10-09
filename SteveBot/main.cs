@@ -13,7 +13,7 @@ using SteveBot.Modules;
 namespace SteveBot
 {
     class main
-    {
+    { 
         public static readonly Random rand = new Random();
         //the bot cannot run within a static main function, so we build one with
         //Async and awaiter built into it for ease of use as a bot

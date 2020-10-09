@@ -9,6 +9,8 @@ namespace SteveBot.Modules.BlackJack
 {
     public class MainCommands : ModuleBase<SocketCommandContext>
     {
+        public bool LongTask = false;
+        private int timerMinutes = 0;
         #region Help Commands
         [Command("help")]
         public async Task Help()
@@ -324,33 +326,54 @@ namespace SteveBot.Modules.BlackJack
 
             await ReplyAsync("This does nothing");
         }
+
         [Command("blackjack Autoplay")]
         public async Task BJAutoPlay(int games = 1)
         {
-            BlackJack.Blackjack bj;
-            string output = "";
-            if (games == 1)
+            if (LongTask)
             {
-                bj = new BlackJack.Blackjack();
-                Player winner = bj.playgame();
-                output = bj.Win();
+                await ReplyAsync("There is already a designated long task running" +
+                                 "\nPlease wait for it to finish");
             }
             else
             {
-                for (int i = 0; i < games; i++)
+                
+                if (games >= 10000) LongTask = true;
+                if (games == 0) games = 1;
+
+                string output = "";
+                if (games == 1)
                 {
-
+                    BlackJack.Blackjack bj = new BlackJack.Blackjack();
+                    Player winner = bj.playgame();
+                    output = bj.Win();
                 }
+                else
+                {
+                    System.Timers.Timer Time = new System.Timers.Timer(6000);
+                    Time.Elapsed += Time_Elapsed;
+                    Time.Start();
+                    BJSIM run = new BJSIM();
+                    run.Simulator(games);
+                    Time.Stop();
+                    output = run.Buildoutput();
+                    output += $"\n{timerMinutes} Minutes!";
+                    LongTask = false;
+                }
+
+                EmbedBuilder EmbedBuilder = new EmbedBuilder()
+                    .WithTitle("Black Jack")
+                    .WithDescription(output)
+                    .WithCurrentTimestamp();
+                Embed embed = EmbedBuilder.Build();
+
+                await ReplyAsync(embed: embed);
             }
+        }
 
-            EmbedBuilder EmbedBuilder = new EmbedBuilder()
-                .WithTitle("Command prefix is '!'")
-                .WithDescription(output)
-                .WithCurrentTimestamp();
-            Embed embed = EmbedBuilder.Build();
-
-            await ReplyAsync("");
-
+        private void Time_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            timerMinutes++;
         }
 
         #endregion BlackJack
