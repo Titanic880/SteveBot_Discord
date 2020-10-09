@@ -74,7 +74,7 @@ namespace SteveBot
             if (!File.Exists(CommandFunctions.linkPath))
                 File.Create(CommandFunctions.linkPath).Close();
             else
-                Modules.CommandFunctions.UpdateLinks(File.ReadAllLines("../../Links.txt").ToList<string>());
+                CommandFunctions.UpdateLinks(File.ReadAllLines("Files/Links.txt").ToList<string>());
 
             if (!File.Exists(CommandFunctions.usercommandsPath))
                 File.Create(CommandFunctions.usercommandsPath).Close();
@@ -99,7 +99,7 @@ namespace SteveBot
         private async Task HandleCommandAsync(SocketMessage arg)
         {
             //Stores user message and initilizes message position
-            var message = arg as SocketUserMessage;
+            SocketUserMessage message = arg as SocketUserMessage;
             int argPos = 0;
             if (message == null)
                 return;
@@ -107,7 +107,8 @@ namespace SteveBot
             if (message.HasStringPrefix("!", ref argPos)
              || message.Content.ToLower() == "help"
              || message.Content.ToLower() == "linking"
-             || message.Content.ToLower() == "calculator")
+             || message.Content.ToLower() == "calculator"
+             || message.Content.ToLower() == "blackjack")
             {
                 //Saves user Input to a debug file for later inspection
                 Modules.CommandFunctions.UserCommand(message);

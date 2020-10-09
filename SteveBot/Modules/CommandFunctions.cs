@@ -26,7 +26,10 @@ namespace SteveBot.Modules
         public static int AddLink(string link)
         {
             Links.Add(link);
-            File.AppendAllText(linkPath, "\n" + link);
+            if(File.ReadAllBytes(linkPath) != null) 
+                File.AppendAllText(linkPath, "\n" + link);
+            else
+                File.AppendAllText(linkPath, link);
             return Links.Count;
         }
         public static void RemoveLink(int input)

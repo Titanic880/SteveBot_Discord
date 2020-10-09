@@ -26,7 +26,7 @@ namespace SteveBot.Modules.BlackJack
             int[] output = new int[2];
             if (input == 0) input = 1;
             for (int i = 0; i < input; i++)
-            {
+            { 
                 Blackjack game = new Blackjack();
                 Player winner = game.playgame();
                 Console.WriteLine(i+"/"+input);

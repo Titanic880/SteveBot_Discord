@@ -10,7 +10,7 @@ namespace SteveBot.Modules.BlackJack
     public class MainCommands : ModuleBase<SocketCommandContext>
     {
         public bool LongTask = false;
-        private int timerMinutes = 0;
+        private int timerSeconds = 0;
         #region Help Commands
         [Command("help")]
         public async Task Help()
@@ -337,10 +337,14 @@ namespace SteveBot.Modules.BlackJack
             }
             else
             {
-                
-                if (games >= 10000) LongTask = true;
-                if (games == 0) games = 1;
 
+                if (games >= 100000)
+                {
+                    await ReplyAsync("Too many games selected, I don't wanna play that much!");
+                    return;
+                }
+                    if (games >= 10000) LongTask = true;
+                if (games == 0) games = 1;
                 string output = "";
                 if (games == 1)
                 {
@@ -350,15 +354,17 @@ namespace SteveBot.Modules.BlackJack
                 }
                 else
                 {
-                    System.Timers.Timer Time = new System.Timers.Timer(6000);
+                    System.Timers.Timer Time = new System.Timers.Timer(1000);
                     Time.Elapsed += Time_Elapsed;
                     Time.Start();
                     BJSIM run = new BJSIM();
                     run.Simulator(games);
                     Time.Stop();
+                    if (timerSeconds == 0) timerSeconds = 1;
                     output = run.Buildoutput();
-                    output += $"\n{timerMinutes} Minutes!";
+                    output += $"\nand took: {timerSeconds} Seconds!";
                     LongTask = false;
+                    timerSeconds = 0;
                 }
 
                 EmbedBuilder EmbedBuilder = new EmbedBuilder()
@@ -373,7 +379,7 @@ namespace SteveBot.Modules.BlackJack
 
         private void Time_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            timerMinutes++;
+            timerSeconds++;
         }
 
         #endregion BlackJack
