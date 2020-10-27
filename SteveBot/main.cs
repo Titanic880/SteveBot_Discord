@@ -14,6 +14,7 @@ namespace SteveBot
 {
     class main
     { 
+        private bool auth_Exists = true;
         public static readonly Random rand = new Random();
         //the bot cannot run within a static main function, so we build one with
         //Async and awaiter built into it for ease of use as a bot
@@ -37,10 +38,15 @@ namespace SteveBot
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
                 .BuildServiceProvider();
-
+            string token;
+            if (auth_Exists)
             //This shall never be seen by anyone but me... (Sign in token for the bot)
-            var token = File.ReadAllText("../../auth.json");
-
+             token = File.ReadAllText("Files/auth.json");
+            else
+            {
+                Console.WriteLine("Auth Token not found, please add it to auth.json in the files folder.");
+                return;
+            }
             _client.Log += _client_Log;
             await RegisterCommandsAsync();
 
@@ -70,7 +76,11 @@ namespace SteveBot
         {
             if (!Directory.Exists("Files/"))
                 Directory.CreateDirectory("Files/");
-            
+            if (!File.Exists("Files/auth.json"))
+            {
+                File.Create("Files/auth.json");
+                auth_Exists = false;
+            }
             if (!File.Exists(CommandFunctions.linkPath))
                 File.Create(CommandFunctions.linkPath).Close();
             else
@@ -103,37 +113,40 @@ namespace SteveBot
             int argPos = 0;
             if (message == null)
                 return;
-            //Checks for prefix or specified passthrough commands
-            if (message.HasStringPrefix("!", ref argPos)
-             || message.Content.ToLower() == "help"
-             || message.Content.ToLower() == "linking"
-             || message.Content.ToLower() == "calculator"
-             || message.Content.ToLower() == "blackjack")
-            {
-                //Saves user Input to a debug file for later inspection
-                Modules.CommandFunctions.UserCommand(message);
-                //generates an object from the user message
-                var context = new SocketCommandContext(_client, message);
-
-                //checks to see if the user is a bot
-                if (message.Author.IsBot)
-                    return;
-
-                //Attempts to run the command and outputs accordingly
-                var result = await _commands.ExecuteAsync(context, argPos, _services);
-                if (!result.IsSuccess)
-                {
-                    Console.WriteLine(result.ErrorReason);
-                    await message.Channel.SendMessageAsync(result.ErrorReason);
-                }
-                if (result.Error.Equals(CommandError.UnmetPrecondition))
-                    await message.Channel.SendMessageAsync(result.ErrorReason);
-            }
-            //if something fails the Prefix check it just returns
+            //checks to see if the user is a bot
             else
             {
-                if(!message.Author.IsBot) Modules.CommandFunctions.UserMessages(message);
-                return;
+                //Checks for prefix or specified passthrough commands
+                if (message.HasStringPrefix("!", ref argPos)
+                 || message.Content.ToLower() == "help"
+                 || message.Content.ToLower() == "linking"
+                 || message.Content.ToLower() == "calculator"
+                 || message.Content.ToLower() == "blackjack"
+                 || message.Content.ToLower() == "k")
+                {
+                    //Saves user Input to a debug file for later inspection
+                    Modules.CommandFunctions.UserCommand(message);
+                    if (message.Author.IsBot)
+                        return;
+                    //generates an object from the user message
+                    SocketCommandContext context = new SocketCommandContext(_client, message);
+
+                    //Attempts to run the command and outputs accordingly
+                    IResult result = await _commands.ExecuteAsync(context, argPos, _services);
+                    if (!result.IsSuccess)
+                    {
+                        Console.WriteLine(result.ErrorReason);
+                        await message.Channel.SendMessageAsync(result.ErrorReason);
+                    }
+                    if (result.Error.Equals(CommandError.UnmetPrecondition))
+                        await message.Channel.SendMessageAsync(result.ErrorReason);
+                }
+                //if something fails the Prefix check it just returns
+                else
+                {
+                    if (!message.Author.IsBot) Modules.CommandFunctions.UserMessages(message);
+                    return;
+                }
             }
         }
     }

@@ -1,0 +1,8 @@
+Started and stalled work on The Tower implementation
+Started work on a more natural way to interact with the calculator
+Finished the blackjack component
+Adjusted where save files are stored for all outcoming data
+Moved Auth Token for distrobution purposes and added a check for the file (Files folder should be missing on first start up)
+Changed all Explicit Variables to implicit, using var is unreliable and can cause readability issues down the line
+Added some meme commands such as 'k' that use websites that host images versus storing them locally
+Added an hourly tick to the main bot loop, It pings the console every 1 hour from start time with a custom message

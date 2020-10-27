@@ -1,9 +1,71 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SteveBot.Modules
 {
     static class Calculator
     {
+        /// <summary>
+        /// Takes a full equation and calculates it
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static double Complex_Equation(string input)
+        {
+            List<double> Numbers = new List<double>();
+            List<string> Enumerators = new List<string>();
+            
+            if(input.Contains("(") && input.Contains(")"))
+            {
+                string[] brackets = input.Split('(');
+                List<string> equation = new List<string>();
+                foreach(string br in brackets)
+                {
+                    string[] eq = br.Split(')');
+                    equation.Add(eq[0]); 
+                }
+            }
+
+            foreach(char seg in input)
+            {
+                string segment = seg.ToString();
+                if(segment == "+" || segment == "-" || segment == "*" || segment == "/" || segment == "^")
+                {
+                    Enumerators.Add(segment);
+                }
+                else
+                {
+                    if(double.TryParse(segment, out double tmp))
+                        Numbers.Add(tmp);
+                }
+            }
+            for(int i = 0; i < Enumerators.Count; i++)
+            {
+                if(Enumerators[i] == "^")
+                {
+                    Numbers[i + 1] = Numbers[i] * Numbers[i + 1];
+                }
+                else if(Enumerators[i] == "/")
+                {
+                    Numbers[i + 1] = div(Numbers[i], Numbers[i + 1]);
+                }
+                else if(Enumerators[i] == "*")
+                {
+                    Numbers[i + 1] = mult(Numbers[i], Numbers[i + 1]);
+                }
+                else if(Enumerators[i] == "+")
+                {
+                    Numbers[i + 1] = add(Numbers[i], Numbers[i + 1]);
+                }
+                else if(Enumerators[i] == "-")
+                {
+                    Numbers[i + 1] = sub(Numbers[i], Numbers[i + 1]);
+                }
+            }
+
+
+            return Numbers[Numbers.Count-1];
+        }
         #region Addition
         /// <summary>
         /// Takes two Integers and returns their sum

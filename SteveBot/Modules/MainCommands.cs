@@ -4,11 +4,19 @@ using Discord;
 using Discord.WebSocket;
 using System.Runtime.CompilerServices;
 using System;
+using System.Net.Configuration;
+using System.Collections.Generic;
 
 namespace SteveBot.Modules.BlackJack
 {
+    struct Towerplayers
+    {
+        public ulong playerID;
+        public TheTower.main Game;
+    }
     public class MainCommands : ModuleBase<SocketCommandContext>
     {
+        private static List<Towerplayers> towerplayers = new List<Towerplayers>();
         public bool LongTask = false;
         private int timerSeconds = 0;
         #region Help Commands
@@ -28,6 +36,7 @@ namespace SteveBot.Modules.BlackJack
                         "\nkick : kick <User> <Comment>" + "" +
                         "\nlinking : Info list for links!" +
                         "\nblackjack : WIP" +
+                        "\nmath : Accepts an equation and will output a single number!"+
                         "\ncalculator : Calculator Help")
                     .WithCurrentTimestamp();
             Embed embed = EmbedBuilder.Build();
@@ -100,6 +109,11 @@ namespace SteveBot.Modules.BlackJack
         {
             await ReplyAsync($"You rolled a  {CommandFunctions.DiceRoll(dice_size + 1)}");
         }
+        [Command("k")]
+        public async Task K()
+        {
+            await ReplyAsync("https://tenor.com/view/bet-gif-5301020");
+        }
 
 
         #endregion Standard Commands
@@ -160,6 +174,53 @@ namespace SteveBot.Modules.BlackJack
 
             await ReplyAsync("");
         }
+        [Command("Tower")]
+        public async Task Tower()
+        {
+            string desc = @"Many try and fail to climb\nWill you succeed?\nChoose your class!"
+                          + "\n1.) Warrior"
+                          + "\n2.) Ranger"
+                          + "\n3.) The Nothing";
+            EmbedBuilder EmbedBuilder = new EmbedBuilder()
+                .WithTitle("Welcome to the Tower!")
+                .WithDescription(desc)
+                .WithCurrentTimestamp();
+            Embed embed = EmbedBuilder.Build();
+            await ReplyAsync(embed: embed);
+        }
+        [Command("Tower Start")]
+        public async Task StartTower(int Startclass, SocketUser user = null)
+        {
+            bool inlist = false;
+            string desc = "Many try and fail to climb\nWill you succeed?\nChoose your class!" +
+                "\n1.) Warrior" +
+                "\n2.) Ranger" +
+                "\n3.) The Nothing";
+            for (int i = 0; i > towerplayers.Count; i++)
+            {
+                if (user.Id == towerplayers[i].playerID)
+                {
+                    desc = "Welcome back\nShall we begin?";
+                    inlist = true;
+                }
+            }
+            if (!inlist)
+            {
+                Towerplayers tp = new Towerplayers();
+                tp.playerID = user.Id;
+                TheTower.main start = new TheTower.main(user.Id, Startclass);
+                towerplayers.Add(tp);
+            }
+
+
+            EmbedBuilder EmbedBuilder = new EmbedBuilder()
+               .WithTitle("Welcome to the Tower!")
+               .WithDescription(desc)
+               .WithCurrentTimestamp();
+            Embed embed = EmbedBuilder.Build();
+            await ReplyAsync(embed: embed);
+        }
+
         #endregion TEST
         #region Bans
         [Command("ban")]
@@ -238,6 +299,16 @@ namespace SteveBot.Modules.BlackJack
         }
         #endregion Bans
         #region Calc    
+        [Command("math")]
+        public async Task Math(string userinput)
+        {
+            double output = Calculator.Complex_Equation(userinput);
+            EmbedBuilder EmbedBuilder = new EmbedBuilder()
+                .WithDescription($"Your final output is {output}")
+                .WithCurrentTimestamp();
+            Embed embed = EmbedBuilder.Build();
+            await ReplyAsync(embed: embed);
+        }
         [Command("add")]
         public async Task Addition(double Num1, double Num2)
         {
@@ -343,8 +414,10 @@ namespace SteveBot.Modules.BlackJack
                     await ReplyAsync("Too many games selected, I don't wanna play that much!");
                     return;
                 }
-                    if (games >= 10000) LongTask = true;
-                if (games == 0) games = 1;
+                if (games >= 10000) 
+                    LongTask = true;
+                if (games == 0)
+                    games = 1;
                 string output = "";
                 if (games == 1)
                 {
@@ -356,15 +429,32 @@ namespace SteveBot.Modules.BlackJack
                 {
                     System.Timers.Timer Time = new System.Timers.Timer(1000);
                     Time.Elapsed += Time_Elapsed;
+                    int gamesplayed = games;
+                    int[] output1 = new int[] { 0, 0 };
+
                     Time.Start();
-                    BJSIM run = new BJSIM();
-                    run.Simulator(games);
+                    for (int i = 0; i < games; i++)
+                    {
+                        Blackjack game = new Blackjack();
+                        Player winner = game.playgame();
+                        Console.WriteLine(i + "/" + games);
+                        if (winner.IsDealer)
+                            output1[0]++;
+                        else
+                            output1[1]++;
+                    }
+
                     Time.Stop();
-                    if (timerSeconds == 0) timerSeconds = 1;
-                    output = run.Buildoutput();
-                    output += $"\nand took: {timerSeconds} Seconds!";
+                    if (timerSeconds == 0)
+                        timerSeconds = 1;
+
                     LongTask = false;
                     timerSeconds = 0;
+
+                    output = $"In {gamesplayed} games" +
+                         $"\nThe dealer won {output1[0]} times " +
+                         $"\nThe player won {output1[1]} times" +
+                         $"\nand took: {timerSeconds} Seconds!";
                 }
 
                 EmbedBuilder EmbedBuilder = new EmbedBuilder()
@@ -381,7 +471,18 @@ namespace SteveBot.Modules.BlackJack
         {
             timerSeconds++;
         }
-
         #endregion BlackJack
+        /*
+        #region Reactions
+        [Command("")]
+        public async Task gg(IEmote emote, RequestOptions options = null)
+        {
+            await MailSettingsSectionGroup.
+        }
+        IAsyncEnumerable<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IEmote emoji, in T limit, RequestOptions options = null)
+        {
+            FlattenAsync<T>(IAsyncEnumerable<IEnumerable<>>);
+        }
+        #endregion Reactions*/
     }
 }

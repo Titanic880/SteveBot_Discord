@@ -97,13 +97,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="main.cs" />
-    <Compile Include="Modules\BlackJack\BJSIM.cs" />
     <Compile Include="Modules\BlackJack\Blackjack.cs" />
     <Compile Include="Modules\BlackJack\DeckStruct.cs" />
     <Compile Include="Modules\BlackJack\Player.cs" />
     <Compile Include="Modules\Calculator.cs" />
     <Compile Include="Modules\CommandFunctions.cs" />
     <Compile Include="Modules\MainCommands.cs" />
+    <Compile Include="Modules\TheTower\Enemy.cs" />
+    <Compile Include="Modules\TheTower\interfaces.cs" />
+    <Compile Include="Modules\TheTower\main.cs" />
+    <Compile Include="Modules\TheTower\Player.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pictures\" />
