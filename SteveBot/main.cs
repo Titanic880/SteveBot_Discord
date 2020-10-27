@@ -13,40 +13,51 @@ using SteveBot.Modules;
 namespace SteveBot
 {
     class main
-    { 
+    {
         private bool auth_Exists = true;
         public static readonly Random rand = new Random();
         //the bot cannot run within a static main function, so we build one with
         //Async and awaiter built into it for ease of use as a bot
         public static void Main(string[] args)
-            => new main().MainAsync().GetAwaiter().GetResult();
+        {
+            //Checks to see if all nessecary directories exist, if not it generates them.
+            main m = new main();
+            m.File_Check();
+
+            //This shall never be seen by anyone but me... (Sign in token for the bot)
+            string token = null;
+
+            if (m.auth_Exists)
+                token = File.ReadAllText("Files/auth.json");
+            if(token == "")
+            {
+                Console.WriteLine("Auth Token not found, please add it to auth.json in the files folder.");
+                Console.WriteLine();
+                Console.ReadLine();
+                return;
+            }
+            maim(token);
+        }
+           
+        static void maim(string token)=> new main().MainAsync(token).GetAwaiter().GetResult();
 
         private DiscordSocketClient _client;
         private CommandService _commands;
         private IServiceProvider _services;
 
-        public async Task MainAsync()
+        public async Task MainAsync(string token)
         {
             _client = new DiscordSocketClient();
             _commands = new CommandService();
 
-            //Checks to see if all nessecary directories exist, if not it generates them.
-            File_Check();
+
 
             //Not 100% sure what this does in its entirity; .AddSingleton == static
             _services = new ServiceCollection()
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
                 .BuildServiceProvider();
-            string token;
-            if (auth_Exists)
-            //This shall never be seen by anyone but me... (Sign in token for the bot)
-             token = File.ReadAllText("Files/auth.json");
-            else
-            {
-                Console.WriteLine("Auth Token not found, please add it to auth.json in the files folder.");
-                return;
-            }
+
             _client.Log += _client_Log;
             await RegisterCommandsAsync();
 
@@ -71,27 +82,6 @@ namespace SteveBot
             return Task.CompletedTask;
         }
 
-        //Checks all Files on runtime
-        private void File_Check()
-        {
-            if (!Directory.Exists("Files/"))
-                Directory.CreateDirectory("Files/");
-            if (!File.Exists("Files/auth.json"))
-            {
-                File.Create("Files/auth.json");
-                auth_Exists = false;
-            }
-            if (!File.Exists(CommandFunctions.linkPath))
-                File.Create(CommandFunctions.linkPath).Close();
-            else
-                CommandFunctions.UpdateLinks(File.ReadAllLines("Files/Links.txt").ToList<string>());
-
-            if (!File.Exists(CommandFunctions.usercommandsPath))
-                File.Create(CommandFunctions.usercommandsPath).Close();
-            
-            if (!File.Exists(CommandFunctions.usermessagesPath))
-                File.Create(CommandFunctions.usermessagesPath).Close();
-        }
         private void wake_Tick(Object source, ElapsedEventArgs e)
         {
             Console.WriteLine("Wakeup Stevebot! the coffee is calling to you!");
@@ -148,6 +138,27 @@ namespace SteveBot
                     return;
                 }
             }
+        }
+        //Checks all Files on runtime
+        private void File_Check()
+        {
+            if (!Directory.Exists("Files/"))
+                Directory.CreateDirectory("Files/");
+            if (!File.Exists("Files/auth.json"))
+            {
+                File.Create("Files/auth.json");
+                auth_Exists = false;
+            }
+            if (!File.Exists(CommandFunctions.linkPath))
+                File.Create(CommandFunctions.linkPath).Close();
+            else
+                CommandFunctions.UpdateLinks(File.ReadAllLines("Files/Links.txt").ToList<string>());
+
+            if (!File.Exists(CommandFunctions.usercommandsPath))
+                File.Create(CommandFunctions.usercommandsPath).Close();
+
+            if (!File.Exists(CommandFunctions.usermessagesPath))
+                File.Create(CommandFunctions.usermessagesPath).Close();
         }
     }
 }
