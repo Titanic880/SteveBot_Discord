@@ -3,69 +3,101 @@ using System.Collections.Generic;
 
 namespace SteveBot.Modules
 {
+    
     static class Calculator
     {
         /// <summary>
         /// Takes a full equation and calculates it
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="_Input"></param>
         /// <returns></returns>
         public static double Complex_Equation(string input)
         {
+            //Take The equation, Break it down by bedmas
+            //
+            input = input.ToLower();
+            double output = 0;
             List<double> Numbers = new List<double>();
             List<string> Enumerators = new List<string>();
-            
-            if(input.Contains("(") && input.Contains(")"))
+
+            //Comma Seperated; First number is starting Bracket, Second is End Bracket
+            List<string> EquationsSorted = new List<string>();
+            //Tracks brackets
+            int brackStartNum = 0;
+            int brackEndNum = 0;
+            int EQSPos = 0;
+            for (int i = 0; i < input.Length; i++)
             {
-                string[] brackets = input.Split('(');
-                List<string> equation = new List<string>();
-                foreach(string br in brackets)
+                if (input.Substring(i, 1) == "(")
                 {
-                    string[] eq = br.Split(')');
-                    equation.Add(eq[0]); 
+                    EquationsSorted.Add(i.ToString());
+                    brackStartNum++;
+
+                    for (int x = 0; x < input.Length - i; x++)
+                    {
+                        if (input.Substring(x, 1) == ")")
+                        {
+                            EquationsSorted[EQSPos] += "," + (x + i);
+                            EQSPos++;
+                        }
+                        else
+                            continue;
+                    }
+                }
+                else if (input.Substring(i, 1) == ")")
+                {
+                    brackEndNum++;
                 }
             }
+            if (brackStartNum != brackEndNum)
+                return 0.0;
 
-            foreach(char seg in input)
+            foreach (char seg in input)
             {
                 string segment = seg.ToString();
-                if(segment == "+" || segment == "-" || segment == "*" || segment == "/" || segment == "^")
+                if (segment == "+" || segment == "-" || segment == "x" || segment == "/" || segment == "^")
                 {
                     Enumerators.Add(segment);
                 }
                 else
                 {
-                    if(double.TryParse(segment, out double tmp))
+                    if (double.TryParse(segment, out double tmp))
                         Numbers.Add(tmp);
                 }
             }
-            for(int i = 0; i < Enumerators.Count; i++)
+            for (int i = 0; i < Enumerators.Count; i++)
             {
-                if(Enumerators[i] == "^")
-                {
-                    Numbers[i + 1] = Numbers[i] * Numbers[i + 1];
-                }
-                else if(Enumerators[i] == "/")
-                {
-                    Numbers[i + 1] = div(Numbers[i], Numbers[i + 1]);
-                }
-                else if(Enumerators[i] == "*")
-                {
-                    Numbers[i + 1] = mult(Numbers[i], Numbers[i + 1]);
-                }
-                else if(Enumerators[i] == "+")
-                {
-                    Numbers[i + 1] = add(Numbers[i], Numbers[i + 1]);
-                }
-                else if(Enumerators[i] == "-")
-                {
-                    Numbers[i + 1] = sub(Numbers[i], Numbers[i + 1]);
-                }
+                output = edmas(Numbers[i],Numbers[i+1],Enumerators[i]);
             }
-
-
-            return Numbers[Numbers.Count-1];
+            return output;
         }
+
+
+        private static double edmas(double Num1, double Num2, string Enumerators)
+        {
+            if (Enumerators == "^")
+            {
+                Num2 = Num1 * Num2;
+            }
+            else if (Enumerators == "/")
+            {
+                Num2 = div(Num1, Num2);
+            }
+            else if (Enumerators == "x")
+            {
+                Num2 = mult(Num1, Num2);
+            }
+            else if (Enumerators == "+")
+            {
+                Num2 = add(Num1, Num2);
+            }
+            else if (Enumerators == "-")
+            {
+                Num2 = sub(Num2, Num1);
+            }
+            return Num2;
+        }
+
         #region Addition
         /// <summary>
         /// Takes two Integers and returns their sum
