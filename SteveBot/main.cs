@@ -36,6 +36,7 @@ namespace SteveBot
                 Console.ReadLine();
                 return;
             }
+            //Starts the Bot
             maim(token);
         }
            
@@ -101,6 +102,7 @@ namespace SteveBot
             //Stores user message and initilizes message position
             SocketUserMessage message = arg as SocketUserMessage;
             int argPos = 0;
+            IGuildChannel bots;
             if (message == null)
                 return;
             //checks to see if the user is a bot
@@ -144,6 +146,7 @@ namespace SteveBot
         {
             if (!Directory.Exists("Files/"))
                 Directory.CreateDirectory("Files/");
+
             if (!File.Exists("Files/auth.json"))
             {
                 File.Create("Files/auth.json");

@@ -20,6 +20,7 @@ namespace SteveBot.Modules
             List<double> Numbers = new List<double>();
             List<string> Enumerators = new List<string>();
 
+            /*
             //Comma Seperated; First number is starting Bracket, Second is End Bracket
             List<string> EquationsSorted = new List<string>();
             //Tracks brackets
@@ -49,13 +50,13 @@ namespace SteveBot.Modules
                     brackEndNum++;
                 }
             }
-            if (brackStartNum != brackEndNum)
-                return 0.0;
-
+           // if (brackStartNum != brackEndNum)
+           //     return 0.0;
+            */
             foreach (char seg in input)
             {
                 string segment = seg.ToString();
-                if (segment == "+" || segment == "-" || segment == "x" || segment == "/" || segment == "^")
+                if (segment == "+" || segment == "-" || segment == "x" || segment == "/" || segment == "^" || segment == "*" || segment == "!")
                 {
                     Enumerators.Add(segment);
                 }
@@ -67,13 +68,16 @@ namespace SteveBot.Modules
             }
             for (int i = 0; i < Enumerators.Count; i++)
             {
-                output = edmas(Numbers[i],Numbers[i+1],Enumerators[i]);
+                if (Enumerators[i] != "!")
+                    output = edmas(Enumerators[i], Numbers[i], Numbers[i + 1]);
+                else
+                    output = edmas(Enumerators[i], Numbers[i]);
             }
             return output;
         }
 
 
-        private static double edmas(double Num1, double Num2, string Enumerators)
+        private static double edmas(string Enumerators, double Num1, double Num2 = 0)
         {
             if (Enumerators == "^")
             {
@@ -83,7 +87,7 @@ namespace SteveBot.Modules
             {
                 Num2 = div(Num1, Num2);
             }
-            else if (Enumerators == "x")
+            else if (Enumerators == "x" || Enumerators == "*")
             {
                 Num2 = mult(Num1, Num2);
             }
@@ -94,6 +98,10 @@ namespace SteveBot.Modules
             else if (Enumerators == "-")
             {
                 Num2 = sub(Num2, Num1);
+            }
+            else if (Enumerators == "!")
+            {
+                double.TryParse(Fact(Convert.ToInt16(Num1)),out Num2);
             }
             return Num2;
         }
