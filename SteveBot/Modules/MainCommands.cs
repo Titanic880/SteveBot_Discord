@@ -2,21 +2,13 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using System.Runtime.CompilerServices;
 using System;
-using System.Net.Configuration;
 using System.Collections.Generic;
 
 namespace SteveBot.Modules.BlackJack
 {
-    struct Towerplayers
-    {
-        public ulong playerID;
-        public TheTower.main Game;
-    }
     public class MainCommands : ModuleBase<SocketCommandContext>
     {
-        private static List<Towerplayers> towerplayers = new List<Towerplayers>();
         public bool LongTask = false;
         private int timerSeconds = 0;
         #region Help Commands
@@ -36,7 +28,7 @@ namespace SteveBot.Modules.BlackJack
                         "\nkick : kick <User> <Comment>" + "" +
                         "\nlinking : Info list for links!" +
                         "\nblackjack : WIP" +
-                        "\nmath : Accepts an equation and will output a single number!"+
+                        "\nmath : Accepts an equation and will output a single number! (comma seperated PostNotation)" +
                         "\ncalculator : Calculator Help")
                     .WithCurrentTimestamp();
             Embed embed = EmbedBuilder.Build();
@@ -188,6 +180,7 @@ namespace SteveBot.Modules.BlackJack
             Embed embed = EmbedBuilder.Build();
             await ReplyAsync(embed: embed);
         }
+        /*
         [Command("Tower Start")]
         public async Task StartTower(int Startclass, SocketUser user = null)
         {
@@ -219,7 +212,7 @@ namespace SteveBot.Modules.BlackJack
                .WithCurrentTimestamp();
             Embed embed = EmbedBuilder.Build();
             await ReplyAsync(embed: embed);
-        }
+        }*/
 
         #endregion TEST
         #region Bans
@@ -388,7 +381,6 @@ namespace SteveBot.Modules.BlackJack
         }
         #endregion Calc
         #region BlackJack
-
         [Command("blackjack deal")]
         public async Task BlackJackDeal(IGuildUser user = null)
         {
@@ -414,7 +406,7 @@ namespace SteveBot.Modules.BlackJack
                     await ReplyAsync("Too many games selected, I don't wanna play that much!");
                     return;
                 }
-                if (games >= 10000) 
+                if (games >= 10000)
                     LongTask = true;
                 if (games == 0)
                     games = 1;
@@ -443,8 +435,8 @@ namespace SteveBot.Modules.BlackJack
                         else
                             output1[1]++;
                     }
-
                     Time.Stop();
+
                     if (timerSeconds == 0)
                         timerSeconds = 1;
 

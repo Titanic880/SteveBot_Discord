@@ -13,67 +13,42 @@ namespace SteveBot.Modules
         /// <returns></returns>
         public static double Complex_Equation(string input)
         {
-            //Take The equation, Break it down by bedmas
-            //
-            input = input.ToLower();
-            double output = 0;
-            List<double> Numbers = new List<double>();
-            List<string> Enumerators = new List<string>();
+            string[] tmp = input.Split(',');
 
-            /*
-            //Comma Seperated; First number is starting Bracket, Second is End Bracket
-            List<string> EquationsSorted = new List<string>();
-            //Tracks brackets
-            int brackStartNum = 0;
-            int brackEndNum = 0;
-            int EQSPos = 0;
-            for (int i = 0; i < input.Length; i++)
+            string operator1, operator2, result = null;
+            Stack<string> stack = new Stack<string>();
+
+            for(int i = 0; i < tmp.Length; i++)
             {
-                if (input.Substring(i, 1) == "(")
+                string Token = tmp[i];
+                if (Token == "+" || Token == "-" || Token == "*" || Token == "/")
                 {
-                    EquationsSorted.Add(i.ToString());
-                    brackStartNum++;
+                    operator2 = stack.Pop();
+                    operator1 = stack.Pop();
 
-                    for (int x = 0; x < input.Length - i; x++)
+                    switch (Token)
                     {
-                        if (input.Substring(x, 1) == ")")
-                        {
-                            EquationsSorted[EQSPos] += "," + (x + i);
-                            EQSPos++;
-                        }
-                        else
-                            continue;
+                        case "+":
+                            result = (Convert.ToDouble(operator1) + Convert.ToDouble(operator2)).ToString();
+                            break;
+                        case "-":
+                            result = (Convert.ToDouble(operator1) - Convert.ToDouble(operator2)).ToString();
+                            break;
+                        case "*":
+                            result = (Convert.ToDouble(operator1) * Convert.ToDouble(operator2)).ToString();
+                            break;
+                        case "/":
+                            result = (Convert.ToDouble(operator1) / Convert.ToDouble(operator2)).ToString();
+                            break;
                     }
+
+                    stack.Push(result);
                 }
-                else if (input.Substring(i, 1) == ")")
-                {
-                    brackEndNum++;
-                }
+                else if (double.TryParse(Token, out double res))
+                    stack.Push(Token);
             }
-           // if (brackStartNum != brackEndNum)
-           //     return 0.0;
-            */
-            foreach (char seg in input)
-            {
-                string segment = seg.ToString();
-                if (segment == "+" || segment == "-" || segment == "x" || segment == "/" || segment == "^" || segment == "*" || segment == "!")
-                {
-                    Enumerators.Add(segment);
-                }
-                else
-                {
-                    if (double.TryParse(segment, out double tmp))
-                        Numbers.Add(tmp);
-                }
-            }
-            for (int i = 0; i < Enumerators.Count; i++)
-            {
-                if (Enumerators[i] != "!")
-                    output = edmas(Enumerators[i], Numbers[i], Numbers[i + 1]);
-                else
-                    output = edmas(Enumerators[i], Numbers[i]);
-            }
-            return output;
+
+            return Convert.ToDouble(stack.Pop());
         }
 
 
