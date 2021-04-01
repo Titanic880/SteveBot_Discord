@@ -302,50 +302,6 @@ namespace SteveBot.Modules.BlackJack
             Embed embed = EmbedBuilder.Build();
             await ReplyAsync(embed: embed);
         }
-        [Command("add")]
-        public async Task Addition(double Num1, double Num2)
-        {
-            string output = Calculator.add(Num1, Num2).ToString();
-
-            EmbedBuilder EmbedBuilder = new EmbedBuilder()
-                 .WithDescription($"{Num1} + {Num2} = {output}")
-                 .WithCurrentTimestamp();
-            Embed embed = EmbedBuilder.Build();
-            await ReplyAsync(embed: embed);
-        }
-        [Command("sub")]
-        public async Task Subtraction(double Num1, double Num2)
-        {
-            string output = Calculator.sub(Num1, Num2).ToString();
-
-            EmbedBuilder EmbedBuilder = new EmbedBuilder()
-                 .WithDescription($"{Num1} - {Num2} = {output}")
-                 .WithCurrentTimestamp();
-            Embed embed = EmbedBuilder.Build();
-            await ReplyAsync(embed: embed);
-        }
-        [Command("mult")]
-        public async Task Multiplication(double Num1, double Num2)
-        {
-            string output = Calculator.mult(Num1, Num2).ToString();
-
-            EmbedBuilder EmbedBuilder = new EmbedBuilder()
-                 .WithDescription($"{Num1} * {Num2} = {output}")
-                 .WithCurrentTimestamp();
-            Embed embed = EmbedBuilder.Build();
-            await ReplyAsync(embed: embed);
-        }
-        [Command("div")]
-        public async Task Division(double Num1, double Num2)
-        {
-            string output = Calculator.div(Num1, Num2).ToString();
-
-            EmbedBuilder EmbedBuilder = new EmbedBuilder()
-                 .WithDescription($"{Num1} / {Num2} = {output}")
-                 .WithCurrentTimestamp();
-            Embed embed = EmbedBuilder.Build();
-            await ReplyAsync(embed: embed);
-        }
         [Command("dec2hex")]
         public async Task Dec2Hex(int Num1)
         {
@@ -371,7 +327,7 @@ namespace SteveBot.Modules.BlackJack
         [Command("fact")]
         public async Task Factorial(int Num1)
         {
-            string output = Calculator.Fact(Num1).ToString();
+            string output = Calculator.Factorial(Num1).ToString();
 
             EmbedBuilder EmbedBuilder = new EmbedBuilder()
                  .WithDescription($"!{Num1} = {output}")
