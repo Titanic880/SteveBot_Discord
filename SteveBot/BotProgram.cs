@@ -1,49 +1,25 @@
-﻿using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
 using System.Reflection;
-using System.Linq;
 using System.Timers;
+using System;
+using Discord.WebSocket;
+using Discord.Commands;
+using Discord;
+using Microsoft.Extensions.DependencyInjection;
 using SteveBot.Modules;
 
 namespace SteveBot
 {
-    class main
+    internal class BotProgram
     {
-        private static bool auth_Exists = true;
-        public static readonly Random rand = new Random();
-        //the bot cannot run within a static main function, so we build one with
-        //Async and awaiter built into it for ease of use as a bot
-        public static void Main(string[] args)
-        {
-            //Checks to see if all nessecary directories exist, if not it generates them
-            File_Check();
-
-            //This shall never be seen by anyone but me... (Sign in token for the bot)
-            string token = null;
-
-            if (auth_Exists)
-                token = File.ReadAllText("Files/auth.json");
-            if(token.Trim() == null || token == "")
-            {
-                Console.WriteLine("Auth Token not found, please add it to auth.json in the files folder.");
-                Console.WriteLine();
-                Console.ReadLine();
-                return;
-            }
-            //Starts the Bot
-            Maim(token);
-        }
-           //assigns the primary main class to a new main which is running in Async
-        static void Maim(string token)=> new main().MainAsync(token).GetAwaiter().GetResult();
+        public const char PrefixChar = '!';
 
         private DiscordSocketClient _client;
         private CommandService _commands;
         private IServiceProvider _services;
+
+        public BotProgram(string token) => new BotProgram().MainAsync(token).GetAwaiter().GetResult();
+        private BotProgram() { }
 
         public async Task MainAsync(string token)
         {
@@ -56,7 +32,7 @@ namespace SteveBot
                 .AddSingleton(_commands)
                 .BuildServiceProvider();
 
-            _client.Log += _client_Log;
+            _client.Log += Client_Log;
             await RegisterCommandsAsync();
 
             //logs the bot into discord
@@ -65,25 +41,25 @@ namespace SteveBot
 
             //Sets up a Timer so that the bot is acted on every hour
             Timer wake = new Timer(3.6e+6);
-            wake.Elapsed += wake_Tick;
+            wake.Elapsed += Wake_Tick;
             wake.AutoReset = true;
             wake.Start();
-            
+
             //tells the bot to wait for input
             await Task.Delay(-1);
         }
 
         //outputs to Console
-        private Task _client_Log(LogMessage arg)
+        private Task Client_Log(LogMessage arg)
         {
             Console.WriteLine(arg);
             return Task.CompletedTask;
         }
 
-        private void wake_Tick(object source, ElapsedEventArgs e)
+        private void Wake_Tick(object source, ElapsedEventArgs e)
         {
             Console.WriteLine("Wakeup Stevebot! the coffee is calling to you!");
-            
+
         }
         //Adds commands to the bot
         public async Task RegisterCommandsAsync()
@@ -96,16 +72,16 @@ namespace SteveBot
         //Command Handler
         private async Task HandleCommandAsync(SocketMessage arg)
         {
-            //Stores user message and initilizes message position
-            SocketUserMessage message = arg as SocketUserMessage;
             int argPos = 0;
-            IGuildChannel bots;
-            if (message == null)
+            //IGuildChannel bots;   //TODO: Implement channel restriction
+            
+            //Stores user message and initilizes message position
+            if (!(arg is SocketUserMessage message))
                 return;
             //checks to see if the user is a bot
             else
                 //Checks for prefix or specified passthrough commands
-                if (message.HasStringPrefix("!", ref argPos)
+                if (message.HasCharPrefix(PrefixChar, ref argPos)
                  || message.Content.ToLower() == "help"
                  || message.Content.ToLower() == "linking"
                  || message.Content.ToLower() == "calculator"
@@ -132,32 +108,11 @@ namespace SteveBot
             //if something fails the Prefix check it just returns
             else
             {
-                if (!message.Author.IsBot) 
+                if (!message.Author.IsBot)
                     CommandFunctions.UserMessages(message);
                 return;
             }
         }
-        //Checks all Files on runtime
-        private static void File_Check()
-        {
-            if (!Directory.Exists("Files/"))
-                Directory.CreateDirectory("Files/");
 
-            if (!File.Exists("Files/auth.json"))
-            {
-                File.Create("Files/auth.json");
-                auth_Exists = false;
-            }
-            if (!File.Exists(CommandFunctions.linkPath))
-                File.Create(CommandFunctions.linkPath).Close();
-            else
-                CommandFunctions.UpdateLinks(File.ReadAllLines("Files/Links.txt").ToList());
-
-            if (!File.Exists(CommandFunctions.usercommandsPath))
-                File.Create(CommandFunctions.usercommandsPath).Close();
-
-            if (!File.Exists(CommandFunctions.usermessagesPath))
-                File.Create(CommandFunctions.usermessagesPath).Close();
-        }
     }
 }

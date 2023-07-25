@@ -48,7 +48,7 @@ namespace SteveBot.Modules
 
                     stack.Push(result);
                 }
-                else if (double.TryParse(Token, out double res))
+                else if (double.TryParse(Token, out _))
                     stack.Push(Token);
             }
 
@@ -61,7 +61,7 @@ namespace SteveBot.Modules
         /// </summary>
         /// <param name="Input"></param>
         /// <returns></returns>
-        public static string dec2hex(int Input)
+        public static string Dec2hex(int Input)
         {
             string tmp = Input.ToString("X");
             return tmp;
@@ -71,7 +71,7 @@ namespace SteveBot.Modules
         /// </summary>
         /// <param name="Input"></param>
         /// <returns></returns>
-        public static int hex2dec(string Input)
+        public static int Hex2dec(string Input)
         {
             int tmp = Convert.ToInt32(Input, 16);
             return tmp;

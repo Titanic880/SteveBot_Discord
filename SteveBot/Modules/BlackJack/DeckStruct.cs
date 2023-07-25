@@ -8,7 +8,7 @@ namespace SteveBot.Modules.BlackJack
 {
     class DeckStruct
     {
-        private List<Card> Deck = new List<Card>();
+        private readonly List<Card> Deck = new List<Card>();
         private int DeckLeft { get { return Deck.Count; } }
 
         public DeckStruct()
@@ -31,15 +31,14 @@ namespace SteveBot.Modules.BlackJack
         //Deck Shuffler
         private void Shuffle()
         {
+            Random rand = new Random();
             int num1, num2;
             for (int i = 0; i < 10000; i++)
             {
-                num1 = main.rand.Next(0, 52);
-                num2 = main.rand.Next(0, 52);
+                num1 = rand.Next(0, 52);
+                num2 = rand.Next(0, 52);
                 //Stashing the old card in memory
-                Card tmp = Deck[num1];
-                Deck[num1] = Deck[num2];
-                Deck[num2] = tmp;
+                (Deck[num2], Deck[num1]) = (Deck[num1], Deck[num2]);
             }
         }
 

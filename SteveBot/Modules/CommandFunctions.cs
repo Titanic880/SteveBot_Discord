@@ -58,25 +58,8 @@ namespace SteveBot.Modules
         #region DiceGames
         public static string DiceRoll(int dice_size)
         {
-            switch (dice_size)
-            {
-                case 4:
-                    return main.rand.Next(4).ToString();
-                case 6:
-                    return main.rand.Next(6).ToString();
-                case 8:
-                    return main.rand.Next(8).ToString();
-                case 10:
-                    return main.rand.Next(10).ToString();
-                case 12:
-                    return main.rand.Next(6).ToString();
-                case 20:
-                    return main.rand.Next(20).ToString();
-                case 100:
-                    return main.rand.Next(100).ToString();
-            }
-            string output = main.rand.Next(dice_size).ToString();
-            return output;
+            Random rand = new Random();
+            return rand.Next(dice_size).ToString();
         }
         #endregion DiceGames
     }

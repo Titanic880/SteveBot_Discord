@@ -35,7 +35,7 @@ namespace SteveBot.Modules.BlackJack
             await ReplyAsync(embed: embed);
         }
         [Command("calculator")]
-        public async Task calc()
+        public async Task Calc()
         {
             EmbedBuilder EmbedBuilder = new EmbedBuilder()
         .WithTitle("Command prefix is '!'")
@@ -125,7 +125,7 @@ namespace SteveBot.Modules.BlackJack
         [Command("randomlink")]
         public async Task RandomLink()
         {
-            string link = CommandFunctions.LinksPub[main.rand.Next(CommandFunctions.LinksPub.Count)];
+            string link = CommandFunctions.LinksPub[new Random().Next(CommandFunctions.LinksPub.Count)];
             await ReplyAsync(link);
         }
         [Command("getlink")]
@@ -161,7 +161,7 @@ namespace SteveBot.Modules.BlackJack
         #endregion Media
         #region TEST
         [Command("test")]
-        public async Task test()
+        public async Task Test()
         {
 
             await ReplyAsync("");
@@ -305,7 +305,7 @@ namespace SteveBot.Modules.BlackJack
         [Command("dec2hex")]
         public async Task Dec2Hex(int Num1)
         {
-            string output = Calculator.dec2hex(Num1);
+            string output = Calculator.Dec2hex(Num1);
 
             EmbedBuilder EmbedBuilder = new EmbedBuilder()
                  .WithDescription($"{Num1} = {output}")
@@ -316,7 +316,7 @@ namespace SteveBot.Modules.BlackJack
         [Command("hex2dec")]
         public async Task Hex2Dec(string Num1)
         {
-            string output = Calculator.hex2dec(Num1).ToString();
+            string output = Calculator.Hex2dec(Num1).ToString();
 
             EmbedBuilder EmbedBuilder = new EmbedBuilder()
                  .WithDescription($"{Num1} = {output}")
