@@ -13,12 +13,14 @@ namespace SteveBot.Modules
         public const string usercommandsPath = "Files/UserCommands.txt";
         public const string usermessagesPath = "Files/UserMessages.txt";
 
-        public static void UpdateLinks(List<string> strlst)
+        public static void UpdateLinks(List<string> strlst = null)
         {
+            if(strlst == null) { strlst = new List<string>(File.ReadAllLines("Files/Links.txt")); }
             //Checks to see if list is empty, if so output console command
-            if (strlst == null)
+            if (strlst.Count == 0)
             {
                 Console.WriteLine("Links list was empty, Please check Links File");
+                if(Links == null) { Links = new List<string>(); }
                 return;
             }
             Links = strlst;

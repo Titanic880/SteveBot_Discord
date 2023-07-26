@@ -133,6 +133,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BotProgram.cs" />
+    <Compile Include="Modules\TheTower\Graphics\Tower_ToDiscord.cs" />
+    <Compile Include="Modules\TheTower\Runtime\Tower_Main.cs" />
+    <Compile Include="Modules\TowerCommands.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Modules\BlackJack\Blackjack.cs" />
     <Compile Include="Modules\BlackJack\DeckStruct.cs" />

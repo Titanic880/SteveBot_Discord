@@ -38,7 +38,7 @@ namespace SteveBot
             if (!File.Exists(CommandFunctions.linkPath))
                 File.Create(CommandFunctions.linkPath).Close();
             else
-                CommandFunctions.UpdateLinks(File.ReadAllLines("Files/Links.txt").ToList());
+                CommandFunctions.UpdateLinks();
 
             if (!File.Exists(CommandFunctions.usercommandsPath))
                 File.Create(CommandFunctions.usercommandsPath).Close();
