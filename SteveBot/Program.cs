@@ -1,5 +1,4 @@
 ﻿using SteveBot.Modules;
-using System.Linq;
 using System.IO;
 using System;
 
@@ -9,7 +8,7 @@ namespace SteveBot
     {
         //the bot cannot run within a static main function, so we build one with
         //Async and awaiter built into it for ease of use as a bot
-        public static void Main(string[] args)
+        public static void Main()
         {
             //Checks to see if all nessecary directories exist, if not it generates them
             if (File_Check())
@@ -25,7 +24,7 @@ namespace SteveBot
 
             if (!File.Exists("Files/auth.json"))
             {
-                File.Create("Files/auth.json");
+                File.Create("Files/auth.json").Close();
                 Console.WriteLine("Please add Token to Files/auth.json to continue...");
                 Console.ReadLine();
             }
@@ -35,6 +34,9 @@ namespace SteveBot
                 Console.ReadLine();
                 result = false;
             }
+
+            if (!File.Exists("Files/Runescape.json"))
+                File.Create(CommandFunctions.linkPath).Close();
             if (!File.Exists(CommandFunctions.linkPath))
                 File.Create(CommandFunctions.linkPath).Close();
             else

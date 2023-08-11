@@ -17,7 +17,7 @@ namespace SteveBot.Modules
         [Command("Attack")]
         public async Task Attack(string Level)
         {
-
+            await ReplyAsync("TBF");
         }
     }
 }

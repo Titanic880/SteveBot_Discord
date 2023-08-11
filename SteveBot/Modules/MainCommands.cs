@@ -4,8 +4,9 @@ using Discord;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
-namespace SteveBot.Modules.BlackJack
+namespace SteveBot.Modules
 {
     public class MainCommands : ModuleBase<SocketCommandContext>
     {
@@ -16,8 +17,9 @@ namespace SteveBot.Modules.BlackJack
         public async Task Help()
         {
             EmbedBuilder EmbedBuilder = new EmbedBuilder()
-                    .WithTitle("Command prefix is '!'")
+                    .WithTitle($"Command prefix is '{BotProgram.PrefixChar}'")
                     .WithDescription("  help : displays this command" +
+                        "\nrshelp : Runescape Help Command" +
                         "\nping : Pong?!" +
                         "\npong : What?" +
                         "\nslap : you what?" +
@@ -370,7 +372,7 @@ namespace SteveBot.Modules.BlackJack
                 if (games == 1)
                 {
                     BlackJack.Blackjack bj = new BlackJack.Blackjack();
-                    Player winner = bj.playgame();
+                    BlackJack.Player winner = bj.playgame();
                     output = bj.Win();
                 }
                 else
@@ -383,8 +385,8 @@ namespace SteveBot.Modules.BlackJack
                     Time.Start();
                     for (int i = 0; i < games; i++)
                     {
-                        Blackjack game = new Blackjack();
-                        Player winner = game.playgame();
+                        BlackJack.Blackjack game = new BlackJack.Blackjack();
+                        BlackJack.Player winner = game.playgame();
                         Console.WriteLine(i + "/" + games);
                         if (winner.IsDealer)
                             output1[0]++;
@@ -432,5 +434,71 @@ namespace SteveBot.Modules.BlackJack
             FlattenAsync<T>(IAsyncEnumerable<IEnumerable<>>);
         }
         #endregion Reactions*/
+        //Move to own file when figured out
+        #region Runescape 
+
+        /// <summary>
+        /// Gets local File contents
+        /// </summary>
+        /// <returns></returns>
+        private List<string> GetRSFile(){
+            List<string> FileContents = new List<string>();
+            using (StreamReader sr = new StreamReader("Files/Runescape.json"))
+            {
+                while (!sr.EndOfStream)
+                    FileContents.Add(sr.ReadLine());
+            }
+            return FileContents;
+        }
+
+
+        [Command("rshelp")]
+        public async Task RShelp()
+        {
+            EmbedBuilder EmbedBuilder = new EmbedBuilder()
+        .WithTitle($"Command prefix is '{BotProgram.PrefixChar}'")
+        .WithDescription("  rshelp : displays this command" +
+            "\nritual Help" +
+            "\nrs"
+            )
+        .WithCurrentTimestamp();
+            Embed embed = EmbedBuilder.Build();
+            await ReplyAsync(embed: embed);
+        }
+        [Command("rssetprice")]
+        public async Task RSSetPrice(string item, string number)
+        {
+            //reg_ink,gre_ink,pow_ink
+            //les_plas,gre_plas,pow_plas
+
+
+
+        }
+        [Command("rsGetPrices")]
+        public async Task RsGetPrices()
+        {
+            List<string> fileinfo = GetRSFile();
+            
+
+            EmbedBuilder EmbedBuilder = new EmbedBuilder()
+.WithTitle($"Command prefix is '{BotProgram.PrefixChar}'")
+.WithDescription("  rshelp : displays this command" +
+"\nritual Help" +
+"\nrs"
+)
+.WithCurrentTimestamp();
+            Embed embed = EmbedBuilder.Build();
+            await ReplyAsync(embed: embed);
+        }
+        [Command("RSritual")]
+        public async Task RSRitualMoney(string Data)
+        {
+            //Data Points needed: Price_inks Price_Plasm, Type  
+
+            string[] Datapoints = Data.Split(" "[0]);
+
+        }
+
+        #endregion Runescape
     }
 }
