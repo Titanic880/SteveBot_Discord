@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System;
 
 namespace SteveBot.Modules
 {
@@ -9,9 +9,10 @@ namespace SteveBot.Modules
         #region Links
         private static List<string> Links;
         public static List<string> LinksPub { get { return Links; } }
-        public const string linkPath = "Files/Links.txt";
+        public const string linkPath         = "Files/Links.txt";
         public const string usercommandsPath = "Files/UserCommands.txt";
         public const string usermessagesPath = "Files/UserMessages.txt";
+        public const string ErrorPath        = "Files/Errors.txt";    
 
         public static void UpdateLinks(List<string> strlst = null)
         {
@@ -54,6 +55,13 @@ namespace SteveBot.Modules
             //Writes to file
             StreamWriter sW = File.AppendText(usermessagesPath);
             sW.WriteLine($"{message.Content}, {message.Author}, {message.CreatedAt.DateTime}");
+            sW.Close();
+        }
+        public static void ErrorMessages(string Error)
+        {
+            //Writes to file
+            StreamWriter sW = File.AppendText(Error);
+            sW.WriteLine($"{DateTime.UtcNow}: {Error}");
             sW.Close();
         }
         #endregion Logging

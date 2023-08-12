@@ -1,15 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using Discord.WebSocket;
+using Discord.Commands;
+using Discord;
+
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using System.Reflection;
 using System.Timers;
 using System;
-using Discord.WebSocket;
-using Discord.Commands;
-using Discord;
-using Microsoft.Extensions.DependencyInjection;
-using SteveBot.Modules;
-using Discord.Net;
-using Newtonsoft.Json;
+
 using System.Threading;
+
+using SteveBot.Modules;
 
 namespace SteveBot
 {
@@ -115,12 +116,13 @@ namespace SteveBot
                         await message.Channel.SendMessageAsync(result.ErrorReason);
                 }
                 //if something fails the Prefix check it just returns
+                /*  LOGS EVERY MESSAGE BOT CAN SEE, Not recommended
                 else
                 {
                     if (!message.Author.IsBot)
                         CommandFunctions.UserMessages(message);
                     return;
-                }
+                }*/
             });
             return Task.CompletedTask;
         }

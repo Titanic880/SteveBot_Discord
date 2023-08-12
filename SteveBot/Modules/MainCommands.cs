@@ -1,10 +1,11 @@
 ﻿using Discord.Commands;
-using System.Threading.Tasks;
 using Discord;
-using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
+
+using System.Threading.Tasks;
 using System.IO;
+using System;
+
+using SteveBot.Content.Runescape;
 
 namespace SteveBot.Modules
 {
@@ -441,62 +442,192 @@ namespace SteveBot.Modules
         /// Gets local File contents
         /// </summary>
         /// <returns></returns>
-        private List<string> GetRSFile(){
-            List<string> FileContents = new List<string>();
+        private RSJson GetRSFile(){
+            string FileContents = "";
             using (StreamReader sr = new StreamReader("Files/Runescape.json"))
             {
-                while (!sr.EndOfStream)
-                    FileContents.Add(sr.ReadLine());
+                FileContents = sr.ReadToEnd();
             }
-            return FileContents;
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<RSJson>(FileContents);
         }
-
+        private bool SetRSFile(RSJson json)
+        {
+            try
+            {
+                using (StreamWriter sw = new StreamWriter("Files/Runescape.json"))
+                {
+                    sw.Write(Newtonsoft.Json.JsonConvert.SerializeObject(json,Newtonsoft.Json.Formatting.Indented));
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                CommandFunctions.ErrorMessages(e.Message);
+                return false;
+            }
+        }
 
         [Command("rshelp")]
         public async Task RShelp()
         {
             EmbedBuilder EmbedBuilder = new EmbedBuilder()
-        .WithTitle($"Command prefix is '{BotProgram.PrefixChar}'")
+        .WithTitle($"Command prefix is '{BotProgram.PrefixChar}' (Commands are not case sensitive)")
         .WithDescription("  rshelp : displays this command" +
             "\nritual Help" +
-            "\nrs"
+            "\nRSpriceHelp : specific help for setting prices" +
+            "\nrssetprice : used to set price of an item" +
+            "\nrsGetPrices : used to get all prices" +
+            "\nRSritual : Get the price of a given ritual (no spaces in ritual)"
             )
         .WithCurrentTimestamp();
             Embed embed = EmbedBuilder.Build();
             await ReplyAsync(embed: embed);
         }
         [Command("rssetprice")]
-        public async Task RSSetPrice(string item, string number)
+        public async Task RSSetPrice(string item, int price)
         {
-            //reg_ink,gre_ink,pow_ink
-            //les_plas,gre_plas,pow_plas
-
-
-
+            item = item.ToLower();
+            //Data Points needed: Price_inks Price_Plasm, Type  
+            RSJson rsf = GetRSFile();
+            switch (item)
+            {
+                case "ash":
+                    rsf.AshPrice = price;
+                    break;
+                case "vial":
+                    rsf.VialOfWater = price;
+                    break;
+                case "lplasm":
+                    rsf.NecroplasmPrices[0] = price;
+                    break;
+                case "gplasm":
+                    rsf.NecroplasmPrices[1] = price;
+                    break;
+                case "pplasm":
+                    rsf.NecroplasmPrices[2] = price;
+                    break;
+                case "rink":
+                    rsf.InkPrices[0] = price;
+                    break;
+                case "gink":
+                    rsf.InkPrices[1] = price;
+                    break;
+                case "pink":
+                    rsf.InkPrices[2] = price;
+                    break;
+                default:
+                    await ReplyAsync("Invalid input, action cancelled");
+                    return;
+            }
+            SetRSFile(rsf);
+            await ReplyAsync($"Price of {item} updated to {price}!");
         }
         [Command("rsGetPrices")]
         public async Task RsGetPrices()
         {
-            List<string> fileinfo = GetRSFile();
-            
+            RSJson rsf = GetRSFile();
 
             EmbedBuilder EmbedBuilder = new EmbedBuilder()
-.WithTitle($"Command prefix is '{BotProgram.PrefixChar}'")
-.WithDescription("  rshelp : displays this command" +
-"\nritual Help" +
-"\nrs"
-)
-.WithCurrentTimestamp();
+                .WithTitle($"Current Bot Prices:")
+                .WithDescription($"AshPrice: {rsf.AshPrice}" +
+                                 "\nLesser Necroplasm: " + rsf.NecroplasmPrices[0] +
+                                 "\nGreater Necroplasm: " + rsf.NecroplasmPrices[1] +
+                                 "\nPowerful Necroplasm: " + rsf.NecroplasmPrices[2] +
+                                 "\nRegular Ink: " + rsf.InkPrices[0] +
+                                 "\nGreater Ink: " + rsf.InkPrices[1] +
+                                 "\nPowerful Ink: " + rsf.InkPrices[2] 
+).WithCurrentTimestamp();
             Embed embed = EmbedBuilder.Build();
+            await ReplyAsync(embed: embed);
+        }
+        [Command("RSpriceHelp")]
+        public async Task RSPriceHelp()
+        {
+            EmbedBuilder embedBuilder = new EmbedBuilder()
+                .WithTitle("Ritual Price Set Guide (Command then provided)")
+                .WithFooter("For rssetprice Command")
+                .WithDescription("ash <price>" +
+                "\nlplasm <price>" +
+                "\ngplasm <price>" +
+                "\npplasm <price>" +
+                "\nrink <price>" +
+                "\ngink <price>" +
+                "\npink <price>"
+).WithCurrentTimestamp();
+            Embed embed = embedBuilder.Build();
+            await ReplyAsync(embed: embed);
+        }
+        [Command("RSritualHelp")]
+        public async Task RSRitualHelp()
+        {
+            EmbedBuilder embedBuilder = new EmbedBuilder()
+                .WithTitle("Ritual specific Info")
+                .WithFooter("For rsritual Command")
+                .WithDescription(
+                "\nlplasm : Lesser Necroplasm" +
+                "\nless   : Lesser Essence" +
+                "\nlcomm  : Lesser Communion" +
+                "\nlens   : Lesser Ensoul" +
+                "\ngplasm : Greater Necroplasm" +
+                "\ngess   : Greater Essence" + 
+                "\ngcomm  : Greater Communion" +
+                "\nens    : Ensoul" +
+                "\npplasm : Powerful Necroplasm" +
+                "\npess   : Powerful Essence" +
+                "\npcomm  : Powerful Communion" +
+                "\ngens   : Greater Ensoul"
+).WithCurrentTimestamp();
+            Embed embed = embedBuilder.Build();
             await ReplyAsync(embed: embed);
         }
         [Command("RSritual")]
         public async Task RSRitualMoney(string Data)
         {
-            //Data Points needed: Price_inks Price_Plasm, Type  
-
-            string[] Datapoints = Data.Split(" "[0]);
-
+            RSJson rsf = GetRSFile();
+            string msg = "Setup Cost: ";
+            switch (Data)
+            {
+               case "lplasm":
+                    msg += rsf.RitualSetup_Cost(RS3Rituals.LesNecro);
+                   break;
+               case "less":
+                    msg += rsf.RitualSetup_Cost(RS3Rituals.LesEss);
+                    break;
+               case "lcomm":
+                    msg += rsf.RitualSetup_Cost(RS3Rituals.LesCommun);
+                    break;
+               case "lens":
+                    msg += rsf.RitualSetup_Cost(RS3Rituals.LesEnsoul);
+                    break;
+               case "gplasm":
+                    msg += rsf.RitualSetup_Cost(RS3Rituals.GreNecro);
+                    break;
+               case "gess":
+                    msg += rsf.RitualSetup_Cost(RS3Rituals.GreEss);
+                    break;
+               case "gcomm":
+                    msg += rsf.RitualSetup_Cost(RS3Rituals.GreCommun);
+                    break;
+               case "ens":
+                    msg += rsf.RitualSetup_Cost(RS3Rituals.GreEnsoul);
+                    break;
+               case "pplasm":
+                    msg += rsf.RitualSetup_Cost(RS3Rituals.PowNecro);
+                    break;
+               case "pess":
+                    msg += rsf.RitualSetup_Cost(RS3Rituals.PowEss);
+                    break;
+               case "pcomm":
+                    msg += rsf.RitualSetup_Cost(RS3Rituals.PowCommun);
+                    break;
+               case "gens":
+                    msg += rsf.RitualSetup_Cost(RS3Rituals.PowEnsoul);
+                    break;
+                default:
+                    msg = "ritual not found";
+                    break;
+            }
+            await ReplyAsync(msg);
         }
 
         #endregion Runescape

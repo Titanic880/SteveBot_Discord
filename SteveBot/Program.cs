@@ -1,6 +1,8 @@
-﻿using SteveBot.Modules;
-using System.IO;
+﻿using System.IO;
 using System;
+
+using SteveBot.Content.Runescape;
+using SteveBot.Modules;
 
 namespace SteveBot
 {
@@ -15,6 +17,7 @@ namespace SteveBot
                 _ = new BotProgram(File.ReadAllText("Files/auth.json"));
             return;
         }
+
         //Checks all Files on runtime
         private static bool File_Check()
         {
@@ -36,12 +39,27 @@ namespace SteveBot
             }
 
             if (!File.Exists("Files/Runescape.json"))
+            {
                 File.Create(CommandFunctions.linkPath).Close();
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter("Files/Runescape.json"))
+                    {
+                        sw.Write(Newtonsoft.Json.JsonConvert.SerializeObject(new RSJson(), Newtonsoft.Json.Formatting.Indented));
+                    }
+                }
+                catch (Exception e)
+                {
+                    CommandFunctions.ErrorMessages(e.Message);
+                }
+            }
             if (!File.Exists(CommandFunctions.linkPath))
                 File.Create(CommandFunctions.linkPath).Close();
             else
                 CommandFunctions.UpdateLinks();
-
+            
+            if (!File.Exists(CommandFunctions.ErrorPath))
+                File.Create(CommandFunctions.ErrorPath).Close();
             if (!File.Exists(CommandFunctions.usercommandsPath))
                 File.Create(CommandFunctions.usercommandsPath).Close();
 

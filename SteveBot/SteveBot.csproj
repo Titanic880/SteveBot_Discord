@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BotProgram.cs" />
+    <Compile Include="Content\Runescape\RSJson.cs" />
     <Compile Include="Content\TheTower\Graphics\Tower_ToDiscord.cs" />
     <Compile Include="Content\TheTower\Runtime\Tower_Main.cs" />
     <Compile Include="Modules\RsCommands.cs" />
@@ -150,7 +151,6 @@
     <Compile Include="Content\TheTower\Player.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\Runescape\" />
     <Folder Include="Pictures\" />
   </ItemGroup>
   <ItemGroup>
