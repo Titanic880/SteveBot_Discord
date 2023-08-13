@@ -446,7 +446,7 @@ namespace SteveBot.Modules
             string FileContents = "";
             using (StreamReader sr = new StreamReader("Files/Runescape.json"))
             {
-                FileContents = sr.ReadToEnd();
+                FileContents = sr.ReadToEndAsync().Result;
             }
             return Newtonsoft.Json.JsonConvert.DeserializeObject<RSJson>(FileContents);
         }
@@ -455,8 +455,8 @@ namespace SteveBot.Modules
             try
             {
                 using (StreamWriter sw = new StreamWriter("Files/Runescape.json"))
-                {
-                    sw.Write(Newtonsoft.Json.JsonConvert.SerializeObject(json,Newtonsoft.Json.Formatting.Indented));
+                { 
+                    sw.WriteAsync(Newtonsoft.Json.JsonConvert.SerializeObject(json,Newtonsoft.Json.Formatting.Indented));
                 }
                 return true;
             }
@@ -497,6 +497,9 @@ namespace SteveBot.Modules
                 case "vial":
                     rsf.VialOfWater = price;
                     break;
+                case "ecto":
+                    rsf.Ectoplasm = price;
+                    break;
                 case "lplasm":
                     rsf.NecroplasmPrices[0] = price;
                     break;
@@ -530,6 +533,7 @@ namespace SteveBot.Modules
             EmbedBuilder EmbedBuilder = new EmbedBuilder()
                 .WithTitle($"Current Bot Prices:")
                 .WithDescription($"AshPrice: {rsf.AshPrice}" +
+                                 "\nEctoplasm: " + rsf.Ectoplasm + 
                                  "\nLesser Necroplasm: " + rsf.NecroplasmPrices[0] +
                                  "\nGreater Necroplasm: " + rsf.NecroplasmPrices[1] +
                                  "\nPowerful Necroplasm: " + rsf.NecroplasmPrices[2] +
@@ -547,6 +551,7 @@ namespace SteveBot.Modules
                 .WithTitle("Ritual Price Set Guide (Command then provided)")
                 .WithFooter("For rssetprice Command")
                 .WithDescription("ash <price>" +
+                "\necto <price>" +
                 "\nlplasm <price>" +
                 "\ngplasm <price>" +
                 "\npplasm <price>" +

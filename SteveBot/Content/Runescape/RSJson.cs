@@ -48,6 +48,7 @@
         private readonly int[] RitualsPerHour = { 119, 59, 42 }; //Theoretical Max amount of rituals per hour (-1 for est inbetweens)
         public int AshPrice = 69;
         public int VialOfWater = 10; //Shop Value
+        public int Ectoplasm = 80;
         /// <summary>
         /// outputs total setup cost (not running/1 ritual)
         /// </summary>
@@ -96,6 +97,44 @@
             int InitCost = RitualSetup_Cost(ritual);
             return -1;
         }
+        /// <summary>
+        /// Cost of a single Alteration Glyph
+        /// </summary>
+        /// <param name="Glyph"></param>
+        /// <returns></returns>
+        public int AlterationCost(RS3Glyphs Glyph)
+        {
+            //Pure numbers being added is the price of the Basic Ink
+            switch (Glyph)
+            {
+                case RS3Glyphs.Multiply1:
+                    return Ectoplasm + (InkPrices[0] * 2) + 1;
+                case RS3Glyphs.Multiply2:
+                    return Ectoplasm + (InkPrices[0] * 2) + 2;
+                case RS3Glyphs.Multiply3:
+                    return (Ectoplasm * 2) + (InkPrices[1] * 2) + (InkPrices[2] * 2);
+                case RS3Glyphs.Protection1:
+                    return Ectoplasm + (InkPrices[0] * 2) + 1;
+                case RS3Glyphs.Protection2:
+                    return Ectoplasm + (InkPrices[0] * 2) + 2;
+                case RS3Glyphs.Protection3:
+                    return (Ectoplasm * 2) + (InkPrices[1] * 2) + (InkPrices[2] * 2);
+                case RS3Glyphs.Speed1:
+                    return Ectoplasm + (InkPrices[0] * 2) + 1;
+                case RS3Glyphs.Speed2:
+                    return Ectoplasm + (InkPrices[0] * 2) + (InkPrices[1] * 2);
+                case RS3Glyphs.Speed3:
+                    return (Ectoplasm * 2) + (InkPrices[1] * 2) + (InkPrices[2] * 2);
+                case RS3Glyphs.Attraction1:
+                    return Ectoplasm + (InkPrices[0] * 2) + 2;
+                case RS3Glyphs.Attraction2:
+                    return Ectoplasm + InkPrices[1] + (InkPrices[2] * 2);
+                case RS3Glyphs.Attraction3:
+                    return (Ectoplasm * 2) + (InkPrices[1] * 2) + (InkPrices[2] * 2);
+                default:
+                    return -1;
+            }
+        }
         public int GlyphLifeSpan(RS3GlyphLifetime Lifetime)
         {
             switch (Lifetime)
@@ -126,43 +165,5 @@
                     return -1;
             }
         }
-        /*
-        public RS3Glyphs[] RitualGlyphs(RS3Rituals ritual)
-        {
-            switch (ritual)
-            {
-                case RS3Rituals.LesNecro:
-                    return new RS3Glyphs[] { RS3Glyphs.Elemental1, 
-                                             RS3Glyphs.Reagent1 };
-                case RS3Rituals.LesCommun:
-                    return new RS3Glyphs[] { RS3Glyphs.Elemental1,
-                                             RS3Glyphs.Commune1,RS3Glyphs.Commune1 };
-                case RS3Rituals.LesEnsoul:
-                    break;
-                case RS3Rituals.LesEss:
-                    break;
-                case RS3Rituals.GreNecro:
-                    return new RS3Glyphs[] { RS3Glyphs.Elemental1, 
-                                             RS3Glyphs.Elemental2, RS3Glyphs.Elemental2, 
-                                             RS3Glyphs.Reagent2,RS3Glyphs.Reagent2 };
-                case RS3Rituals.GreCommun:
-                    return new RS3Glyphs[] { RS3Glyphs.Elemental2,RS3Glyphs.Elemental2,
-                                             RS3Glyphs.Commune1,  RS3Glyphs.Commune2,RS3Glyphs.Commune2 };
-                case RS3Rituals.GreEnsoul:
-                    break;
-                case RS3Rituals.GreEss:
-                    break;
-                case RS3Rituals.PowNecro:
-                    return new RS3Glyphs[] { RS3Glyphs.Elemental2,RS3Glyphs.Elemental2,RS3Glyphs.Elemental2,
-                                             RS3Glyphs.Elemental3,RS3Glyphs.Elemental3,RS3Glyphs.Elemental3,RS3Glyphs.Elemental3,
-                                             RS3Glyphs.Reagent3  ,RS3Glyphs.Reagent3};
-                case RS3Rituals.PowCommun:
-                    return new RS3Glyphs[] { RS3Glyphs.Elemental3, };
-                case RS3Rituals.PowEss:
-                    break;
-                default:
-                    return new RS3Glyphs[0];
-            }*/
     }
 }
-
