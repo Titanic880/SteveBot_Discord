@@ -737,5 +737,13 @@ namespace SteveBot.Modules
             await ReplyAsync($"The total cost of {amount} of {input} is: {cost}");
         }
         #endregion Runescape
+
+        #region Payday
+        
+        #endregion Payday
+
+        #region Call of Duty
+
+        #endregion Call of Duty
     }
 }
