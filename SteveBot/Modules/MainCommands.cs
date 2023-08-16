@@ -442,7 +442,7 @@ namespace SteveBot.Modules
         /// Gets local File contents
         /// </summary>
         /// <returns></returns>
-        private RSJson GetRSFile(){
+        private RSJson GetRSFile() {
             string FileContents = "";
             using (StreamReader sr = new StreamReader("Files/Runescape.json"))
             {
@@ -455,8 +455,8 @@ namespace SteveBot.Modules
             try
             {
                 using (StreamWriter sw = new StreamWriter("Files/Runescape.json"))
-                { 
-                    sw.WriteAsync(Newtonsoft.Json.JsonConvert.SerializeObject(json,Newtonsoft.Json.Formatting.Indented));
+                {
+                    sw.WriteAsync(Newtonsoft.Json.JsonConvert.SerializeObject(json, Newtonsoft.Json.Formatting.Indented));
                 }
                 return true;
             }
@@ -466,7 +466,47 @@ namespace SteveBot.Modules
                 return false;
             }
         }
+        [Command("rsupdateprice")]
+        public async Task UpdatePrice()
+        {
+            await ReplyAsync("Command under construction, Check back later!");
+            return;
 
+            DateTime CompTime = DateTime.UtcNow;
+            RSJson rsf = GetRSFile();
+
+            //Adjust this to change update interval (API Dependant)
+            CompTime = CompTime.AddHours(-1); 
+
+            //Check for spam update call
+            if (rsf.LastUpdated >= CompTime && !rsf.UpdatedCall)
+            {
+                rsf.UpdatedCall = true;
+                SetRSFile(rsf);
+                await ReplyAsync("File has been updated too recently!");
+                return;
+            }
+            if (rsf.UpdatedCall)
+                return;
+                
+            try
+            {
+                //Get Data from GE
+
+
+                //Apply to format
+
+
+                //push to file
+                SetRSFile(rsf);
+                await ReplyAsync("Prices have been updated!");
+            }
+            catch (Exception e)
+            {
+                CommandFunctions.ErrorMessages(e.Message);
+                await ReplyAsync("A problem has occoured when fetching new data.");
+            }
+        }
         [Command("rshelp")]
         public async Task RShelp()
         {
@@ -477,7 +517,9 @@ namespace SteveBot.Modules
             "\nRSpriceHelp : specific help for setting prices" +
             "\nrssetprice : used to set price of an item" +
             "\nrsGetPrices : used to get all prices" +
-            "\nRSritual : Get the price of a given ritual (no spaces in ritual)"
+            "\nRSritual : Get the price of a given ritual (no spaces in ritual)" +
+            "\nrsAlteration : GlyphX(X being tier) <amount>" + 
+            ""
             )
         .WithCurrentTimestamp();
             Embed embed = EmbedBuilder.Build();
@@ -635,6 +677,65 @@ namespace SteveBot.Modules
             await ReplyAsync(msg);
         }
 
+        
+        /// <summary>
+        /// Takes the glyph/rank and the amount and outputs the cost
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        [Command("RSAlteration")]
+        public async Task RSAlteration(string input, int amount = 1)
+        {
+            RSJson rsf = GetRSFile();
+            RS3Glyphs glyph;
+            switch (input)
+            {
+                case "multiply1":
+                    glyph = RS3Glyphs.Multiply1;
+                    break;
+                case "multiply2":
+                    glyph = RS3Glyphs.Multiply2;
+                    break;
+                case "multiply3":
+                    glyph = RS3Glyphs.Multiply3;
+                    break;
+                case "protection1":
+                    glyph = RS3Glyphs.Protection1;
+                    break;
+                case "protection2":
+                    glyph = RS3Glyphs.Protection2;
+                    break;
+                case "protection3":
+                    glyph = RS3Glyphs.Protection3;
+                    break;
+                case "speed1":
+                    glyph = RS3Glyphs.Speed1;
+                    break;
+                case "speed2":
+                    glyph = RS3Glyphs.Speed2;
+                    break;
+                case "speed3":
+                    glyph = RS3Glyphs.Speed3;
+                    break;
+                case "attraction1":
+                    glyph = RS3Glyphs.Attraction1;
+                    break;
+                case "attraction2":
+                    glyph = RS3Glyphs.Attraction2;
+                    break;
+                case "attraction3":
+                    glyph = RS3Glyphs.Attraction3;
+                    break;
+                default:
+                    await ReplyAsync("invalid Glyph");
+                    return;
+            }
+            int cost = rsf.AlterationCost(glyph);
+            cost *= amount;
+
+            await ReplyAsync($"The total cost of {amount} of {input} is: {cost}");
+        }
         #endregion Runescape
     }
 }

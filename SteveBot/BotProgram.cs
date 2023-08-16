@@ -41,18 +41,13 @@ namespace SteveBot
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
                 .BuildServiceProvider();
-            
-            
+           
             _client.Log += Client_Log;
             await RegisterCommandsAsync();
-
-            //Console.ReadLine();
 
             //logs the bot into discord
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
-            //DEBUG
-            //await Client_Ready();
 
             await Task.Delay(Timeout.Infinite);
         }

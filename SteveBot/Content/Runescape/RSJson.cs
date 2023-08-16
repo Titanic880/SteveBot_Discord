@@ -1,4 +1,6 @@
-﻿namespace SteveBot.Content.Runescape
+﻿using System;
+
+namespace SteveBot.Content.Runescape
 {
     public enum RS3Rituals
     {
@@ -46,6 +48,8 @@
         public int[] InkPrices = new int[3] { 0, 1, 2 };
         private readonly int[] RitualDurations = { 30, 60, 84 }; //Amount of time stated in game for the ritual to take (Assumed to be seconds)
         private readonly int[] RitualsPerHour = { 119, 59, 42 }; //Theoretical Max amount of rituals per hour (-1 for est inbetweens)
+        public DateTime LastUpdated = DateTime.UtcNow;
+        public bool UpdatedCall = false;
         public int AshPrice = 69;
         public int VialOfWater = 10; //Shop Value
         public int Ectoplasm = 80;
