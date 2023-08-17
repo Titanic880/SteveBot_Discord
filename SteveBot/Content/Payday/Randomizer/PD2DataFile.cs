@@ -1,6 +1,7 @@
-﻿using static SteveBot.Content.Payday.Randomizer.Generic_Data;
-using System.Linq;
+﻿using System.Linq;
 using System;
+
+using static SteveBot.Content.Payday.Randomizer.Generic_Data;
 
 namespace SteveBot.Content.Payday.Randomizer
 {

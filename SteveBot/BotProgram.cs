@@ -5,10 +5,10 @@ using Discord;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Threading;
 using System.Timers;
 using System;
 
-using System.Threading;
 
 using SteveBot.Modules;
 
@@ -68,7 +68,6 @@ namespace SteveBot
         private void Wake_Tick(object source, ElapsedEventArgs e)
         {
             Console.WriteLine("Wakeup Stevebot! the coffee is calling to you!");
-
         }
         //Adds commands to the bot
         public async Task RegisterCommandsAsync()

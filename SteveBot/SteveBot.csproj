@@ -133,6 +133,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BotProgram.cs" />
+    <Compile Include="Content\Call of Duty\Perks.cs" />
+    <Compile Include="Content\Call of Duty\Randomizer\ZombRandLib.cs" />
+    <Compile Include="Content\Call of Duty\WeaponNames.cs" />
     <Compile Include="Content\Payday\Randomizer\Generic_Data.cs" />
     <Compile Include="Content\Payday\Randomizer\PD2DataFile.cs" />
     <Compile Include="Content\Runescape\RSJson.cs" />
@@ -154,7 +157,6 @@
     <Compile Include="Content\TheTower\Player.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\Call of Duty\Randomizer\" />
     <Folder Include="Pictures\" />
   </ItemGroup>
   <ItemGroup>

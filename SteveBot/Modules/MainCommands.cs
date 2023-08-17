@@ -712,7 +712,22 @@ namespace SteveBot.Modules
         #endregion Payday
 
         #region Call of Duty
+        [Command("CODCWRand")]
+        public async Task CODCWRandomizer(string input = "all")
+        {
+            input = input.ToLower();
+            Content.Call_of_Duty.Randomizer.ZombRandLib randlib = new Content.Call_of_Duty.Randomizer.ZombRandLib();
 
+            randlib.TrueRandomize();
+
+            //build from switch results
+            EmbedBuilder EmbedBuilder = new EmbedBuilder()
+                .WithTitle($"Payday 2 Randomizer")
+                .WithDescription(randlib.GetResult())
+                .WithCurrentTimestamp();
+            Embed embed = EmbedBuilder.Build();
+            await ReplyAsync(embed: embed);
+        }
         #endregion Call of Duty
     }
 }
