@@ -1,6 +1,6 @@
 ﻿using static Content.Payday.Randomizer.Generic_Data;
-using System;
 using System.Linq;
+using System;
 
 namespace Content.Payday.Randomizer
 {
@@ -11,42 +11,40 @@ namespace Content.Payday.Randomizer
         /// <summary>
         /// Determines if random primary will only roll Akimbos when hitman it rolled
         /// </summary>
-        public bool HitmanSafeGuard { get; set; } = true;
-        public bool GrinderSafeGuard { get; set; } = true;
-        //TODO: Find original intent
-        public bool PerkDeck_SafeGuard { get; private set; } = false;
-        public bool Allow_OneDown { get; private set; } = true;
+        private bool HitmanSafeGuard { get; set; } = true;
+        private bool GrinderSafeGuard { get; set; } = true;
+        private bool Allow_OneDown { get; set; } = true;
         #endregion Options
         #region Randomized Items
         /// <summary>
         /// Randomly Generated deck
         /// </summary>
-        public string Current_Deck { get; private set; } = null;
+        private string Current_Deck { get; set; } = null;
         /// <summary>
         /// Randomly Generated Throwable
         /// </summary>
-        public static string Throwable { get; private set; } = null;
+        private static string Throwable { get; set; } = null;
         /// <summary>
         /// Randomly Generated Primary
         /// </summary>
-        public static string PrimaryCat { get; private set; } = null;
+        private static string PrimaryCat { get; set; } = null;
         /// <summary>
         /// Randomly Generated Secondary
         /// </summary>
-        public static string SecondaryCat { get; private set; } = null;
+        private static string SecondaryCat { get; set; } = null;
         /// <summary>
         /// Randomly Generated Melee type
         /// </summary>
-        public static string MeleeCat { get; private set; } = null;
+        private static string MeleeCat { get; set; } = null;
         /// <summary>
         /// Randomly Generated Deployable
         /// </summary>
-        public static string Deployable { get; private set; } = null;
+        private static string Deployable { get; set; } = null;
         /// <summary>
         /// Randomly generated Armor Tier
         /// </summary>
-        public static string ArmorLv { get; private set; } = null;
-        public string Difficulty { get; private set; } = null;
+        private static string ArmorLv { get; set; } = null;
+        private string Difficulty { get; set; } = null;
 
         #endregion Randomized Items
 
@@ -85,21 +83,20 @@ namespace Content.Payday.Randomizer
         /// </summary>
         public void SetThrowable()
         {
-            if(DeckEquips.Contains(Current_Deck))
+            if (!DeckEquips.Contains(Current_Deck))
             {
                 Throwable = Throwables[rand.Next(Throwables.Length - 1)];
                 return;
             }
-            ///Checks if the current perk deck has an equipable, if it does sets it
+            //Checks if the current perk deck has an equipable, if it does sets it
             for (int i = 0; i < DeckEquips.Length; i++)
                 if (Current_Deck == DeckEquips[i])
                 {
                     Throwable = DeckThrowables[i];
-                    break;
+                    return;
                 }
-
-            if (Throwable == null)
-                Throwable = Throwables[rand.Next(Throwables.Length - 1)];
+            //if no deck specific throwable is found, run it against full list
+            Throwable = Throwables[rand.Next(Throwables.Length - 1)];
         }
 
         public void SetPrimary()
@@ -134,9 +131,5 @@ namespace Content.Payday.Randomizer
                 Difficulty += ": One Down";
         }
         #endregion SetRandomized
-
-        #region Randomized Items
-
-        #endregion Randomized Items
     }
 }
