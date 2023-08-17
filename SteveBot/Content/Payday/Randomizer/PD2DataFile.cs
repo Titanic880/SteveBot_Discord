@@ -65,23 +65,23 @@ namespace Content.Payday.Randomizer
         /// <summary>
         /// Sets all Random Values
         /// </summary>
-        public void SetAll()
+        public void RandomizeAll()
         {
-            SetPerkDeck();
-            SetThrowable();
-            SetPrimary();
-            SetSecondary();
-            SetMelee();
-            SetDeployable();
-            SetArmor();
-            SetDifficulty();
+            RandPerkDeck();
+            RandThrowable();
+            RandPrimary();
+            RandSecondary();
+            RandMelee();
+            RandDeployable();
+            RandArmor();
+            RandDifficulty();
         }
 
-        public void SetPerkDeck() => Current_Deck = PerkDecks[rand.Next(PerkDecks.Length - 1)];
+        public void RandPerkDeck() => Current_Deck = PerkDecks[rand.Next(PerkDecks.Length - 1)];
         /// <summary>
         /// Sets a random Throwable, Checks for perk deck first
         /// </summary>
-        public void SetThrowable()
+        public void RandThrowable()
         {
             if (!DeckEquips.Contains(Current_Deck))
             {
@@ -99,17 +99,17 @@ namespace Content.Payday.Randomizer
             Throwable = Throwables[rand.Next(Throwables.Length - 1)];
         }
 
-        public void SetPrimary()
+        public void RandPrimary()
         {
             if (Current_Deck == "Hitman" && HitmanSafeGuard)
                 PrimaryCat = Primaries[rand.Next(3) + 5];
             else
                 PrimaryCat = Primaries[rand.Next(Primaries.Length - 1)];
         }
-        public void SetSecondary() => SecondaryCat = Secondaries[rand.Next(Secondaries.Length - 1)];
-        public void SetMelee() => MeleeCat = Melees[rand.Next(Melees.Length - 1)];
-        public void SetDeployable() => Deployable = Deployables[rand.Next(Deployables.Length - 1)]; 
-        public void SetArmor() 
+        public void RandSecondary() => SecondaryCat = Secondaries[rand.Next(Secondaries.Length - 1)];
+        public void RandMelee() => MeleeCat = Melees[rand.Next(Melees.Length - 1)];
+        public void RandDeployable() => Deployable = Deployables[rand.Next(Deployables.Length - 1)]; 
+        public void RandArmor() 
         {
             //Checks for the grinder deck and checks the safeguard
             if(Current_Deck == "Grinder" && GrinderSafeGuard)
@@ -123,7 +123,7 @@ namespace Content.Payday.Randomizer
             else
                 ArmorLv = Armor[rand.Next(Armor.Length - 1)]; 
         }
-        public void SetDifficulty()
+        public void RandDifficulty()
         {
             Difficulty = Difficulties[rand.Next(Difficulties.Length) + 1];
             //Check for One down mechanic addition

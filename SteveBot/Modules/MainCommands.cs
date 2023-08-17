@@ -6,6 +6,7 @@ using System.IO;
 using System;
 
 using SteveBot.Content.Runescape;
+using Content.Payday.Randomizer;
 
 namespace SteveBot.Modules
 {
@@ -755,13 +756,19 @@ namespace SteveBot.Modules
         public async Task PD2Randomize(string input = "all")
         {
             input = input.ToLower();
+            PD2DataFile pd2data = new PD2DataFile();
             switch (input) {
                 case "all":
-                    //Content.Payday.Randomizer.
+                    pd2data.RandomizeAll();
                     break;
             }
 
-
+            EmbedBuilder EmbedBuilder = new EmbedBuilder()
+                .WithTitle($"Payday 2 Randomizer")
+                .WithDescription(pd2data.GetResult())
+                .WithCurrentTimestamp();
+            Embed embed = EmbedBuilder.Build();
+            await ReplyAsync(embed: embed);
         }
         #endregion Payday
 
