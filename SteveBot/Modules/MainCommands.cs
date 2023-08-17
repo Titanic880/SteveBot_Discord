@@ -22,14 +22,15 @@ namespace SteveBot.Modules
                     .WithTitle($"Command prefix is '{BotProgram.PrefixChar}'")
                     .WithDescription("  help : displays this command" +
                         "\nrshelp : Runescape Help Command" +
+                        "\npd2rand : Randomizer for Payday 2" +
                         "\nping : Pong?!" +
                         "\npong : What?" +
                         "\nslap : you what?" +
                         "\nkek : lol" +
                         "\nroll : Rolls a specified dice; 4,6,8,10,20,100 (default:6)" +
-                        "\nban  : ban <User> <Comment>" +
+/*                        "\nban  : ban <User> <Comment>" +
                         "\nunban: unban <User> <Comment>" +
-                        "\nkick : kick <User> <Comment>" + "" +
+                        "\nkick : kick <User> <Comment>" + "" +*/
                         "\nlinking : Info list for links!" +
                         "\nblackjack : WIP" +
                         "\nmath : Accepts an equation and will output a single number! (comma seperated PostNotation)" +
@@ -42,7 +43,7 @@ namespace SteveBot.Modules
         public async Task Calc()
         {
             EmbedBuilder EmbedBuilder = new EmbedBuilder()
-        .WithTitle("Command prefix is '!'")
+        .WithTitle($"Command prefix is '{BotProgram.PrefixChar}'")
         .WithDescription("  calculator : displays this command" +
             "\nadd : Basic Addition <Num1>  <Num2>" +
             "\nsub  : Basic Subtraction <Num2>  <Num1>" +
@@ -752,7 +753,7 @@ namespace SteveBot.Modules
             Embed embed = EmbedBuilder.Build();
             await ReplyAsync(embed: embed);
         }
-        [Command("pd2Rando")]
+        [Command("pd2Rand")]
         public async Task PD2Randomize(string input = "all")
         {
             input = input.ToLower();
@@ -763,6 +764,7 @@ namespace SteveBot.Modules
                     break;
             }
 
+            //build from switch results
             EmbedBuilder EmbedBuilder = new EmbedBuilder()
                 .WithTitle($"Payday 2 Randomizer")
                 .WithDescription(pd2data.GetResult())

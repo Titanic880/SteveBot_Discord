@@ -52,7 +52,7 @@ namespace Content.Payday.Randomizer
         public string GetResult()
         {
             return
-            "Deck: " + Current_Deck +
+            "Perk Deck: " + Current_Deck +
             "\nPrimary: " + PrimaryCat +
             "\nSecondary: " + SecondaryCat +
             "\nMelee: " + MeleeCat +

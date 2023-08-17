@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SteveBot.Modules
 {
@@ -7,51 +8,104 @@ namespace SteveBot.Modules
     static class Calculator
     {
         /// <summary>
-        /// Takes a full equation and calculates it (Splits on comma or space)
+        /// Takes a full equation and calculates it
         /// </summary>
         /// <param name="_Input"></param>
         /// <returns></returns>
         public static double Complex_Equation(string input)
         {
-            string[] tmp = input.Split(',');
-            if(tmp.Length == 0)
-               return double.NaN;
-            if(tmp.Length == 1) //Splits on space
-                tmp = input.Split(' ');
-            
-            string operator1, operator2, result = null;
-            Stack<string> stack = new Stack<string>();
+            char[] ops = { '-', '+', '*', '/' };
+            //Break and check for math information
+            List<string> tmp = new List<string>();
+            string bracket = "";
+            bool brack = false;
+            string placeholder = "";
 
-            for(int i = 0; i < tmp.Length; i++)
+            foreach (char a in input)
             {
-                string Token = tmp[i];
-                if (Token == "+" || Token == "-" || Token == "*" || Token == "/")
+                //Check for Bracket
+                if (a == '(')
                 {
-                    operator2 = stack.Pop();
-                    operator1 = stack.Pop();
-
-                    switch (Token)
+                    brack = true;
+                    //x() auto complete
+                    if(placeholder!="")
                     {
-                        case "+":
-                            result = (Convert.ToDouble(operator1) + Convert.ToDouble(operator2)).ToString();
-                            break;
-                        case "-":
-                            result = (Convert.ToDouble(operator1) - Convert.ToDouble(operator2)).ToString();
-                            break;
-                        case "*":
-                            result = (Convert.ToDouble(operator1) * Convert.ToDouble(operator2)).ToString();
-                            break;
-                        case "/":
-                            result = (Convert.ToDouble(operator1) / Convert.ToDouble(operator2)).ToString();
-                            break;
+                        tmp.Add(placeholder);
+                        tmp.Add(ops[2].ToString());
                     }
-
-                    stack.Push(result);
+                    continue;
                 }
-                else if (double.TryParse(Token, out _))
-                    stack.Push(Token);
-            }
+                if (brack || a == ')')
+                {
+                    if (a == ')')
+                    {
+                        brack = false;
+                        //Recursively solve the equation
+                        tmp.Add(Complex_Equation(bracket).ToString());
+                        continue;
+                    }
+                    else
+                    {
+                        bracket += a;
+                        continue;
+                    }
+                }
+                //Check for operator (allows bigger than 0-9 operations)
+                if (ops.Contains(a))
+                {
+                    if(placeholder != "")
+                    {
+                        tmp.Add(placeholder);
+                        placeholder = "";
+                    }
+                    tmp.Add(a.ToString());
+                    continue;
+                }
+                placeholder += a;
 
+            }
+            //Catch Missing Values (Better option?)
+            if (placeholder != "")
+                tmp.Add(placeholder);
+
+
+            if(tmp.Count == 0)
+               return double.NaN;
+            string value1, value2, result = null;
+            //Queues work for Simple equations, but break once oop is broken in system
+            //Stacks dont work cause ??
+            Stack<string> stack = new Stack<string>();
+            Stack<char> operators = new Stack<char>();
+            for(int i = tmp.Count-1; i != -1; i--)
+            {
+                if (ops.Contains(tmp[i][0])) operators.Push(tmp[i][0]);
+                else if (double.TryParse(tmp[i].ToString(), out _))
+                    stack.Push(tmp[i].ToString());
+            }
+            while (stack.Count != 1)
+            {
+                value2 = stack.Pop();
+                value1 = stack.Pop();
+
+                switch (operators.Pop())
+                {
+                    case '+':
+                        result = (Convert.ToDouble(value1) + Convert.ToDouble(value2)).ToString();
+                        break;
+                    case '-':
+                        result = (Convert.ToDouble(value1) - Convert.ToDouble(value2)).ToString();
+                        break;
+                    case '*':
+                        result = (Convert.ToDouble(value1) * Convert.ToDouble(value2)).ToString();
+                        break;
+                    case '/':
+                        result = (Convert.ToDouble(value2) / Convert.ToDouble(value1)).ToString();
+                        break;
+                }
+                //stack = new Queue<string>(stack.Reverse());
+                stack.Push(result);
+                //stack = new Queue<string>(stack.Reverse());
+            }
             return Convert.ToDouble(stack.Pop());
         }
 
