@@ -105,7 +105,6 @@
         };
         public readonly static string[] Difficulties =
         {
-            "One Down",
             "Normal",
             "Hard",
             "Very Hard",

@@ -757,7 +757,7 @@ namespace SteveBot.Modules
             input = input.ToLower();
             switch (input) {
                 case "all":
-                    Content.Payday.Randomizer.
+                    //Content.Payday.Randomizer.
                     break;
             }
 
