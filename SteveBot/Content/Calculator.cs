@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SteveBot.Modules
 {
-    
+
     static class Calculator
     {
         /// <summary>
@@ -14,13 +15,12 @@ namespace SteveBot.Modules
         /// <returns></returns>
         public static double Complex_Equation(string input)
         {
-            char[] ops = { '-', '+', '*', '/' };
+            char[] ops = {'^', '*', '/', '-', '+' };
             //Break and check for math information
             List<string> tmp = new List<string>();
             string bracket = "";
             bool brack = false;
             string placeholder = "";
-
             foreach (char a in input)
             {
                 //Check for Bracket
@@ -28,7 +28,7 @@ namespace SteveBot.Modules
                 {
                     brack = true;
                     //x() auto complete
-                    if(placeholder!="")
+                    if (placeholder != "")
                     {
                         tmp.Add(placeholder);
                         tmp.Add(ops[2].ToString());
@@ -53,7 +53,7 @@ namespace SteveBot.Modules
                 //Check for operator (allows bigger than 0-9 operations)
                 if (ops.Contains(a))
                 {
-                    if(placeholder != "")
+                    if (placeholder != "")
                     {
                         tmp.Add(placeholder);
                         placeholder = "";
@@ -69,44 +69,64 @@ namespace SteveBot.Modules
                 tmp.Add(placeholder);
 
 
-            if(tmp.Count == 0)
-               return double.NaN;
-            string value1, value2, result = null;
-            //Queues work for Simple equations, but break once oop is broken in system
-            //Stacks dont work cause ??
-            Stack<string> stack = new Stack<string>();
+            if (tmp.Count == 0)
+                return double.NaN;
+            string value1, value2;
+
+
+            while (tmp.Count > 1)
+            {
+                //Pemdas order (minus the Brackets)
+                foreach (char op in ops)
+                {
+                    int index = tmp.IndexOf(op.ToString());
+                    if (index < 0) continue;
+                    //Fetch Values
+                    value1 = tmp[index + 1];
+                    value2 = tmp[index - 1];
+
+                    tmp[index] = calcSimple(value2,value1,op);
+                    //Clean up Left over values
+                    tmp.RemoveAt(index + 1);
+                    tmp.RemoveAt(index - 1);
+                }
+            }
+
+
+
+            ///NEEDS TO BE REWRITTEN FOR A PEMDAS COMPLIANT SYSTEM
+            /*Stack<string> stack = new Stack<string>();
             Stack<char> operators = new Stack<char>();
-            for(int i = tmp.Count-1; i != -1; i--)
+            for (int i = tmp.Count - 1; i != -1; i--)
             {
                 if (ops.Contains(tmp[i][0])) operators.Push(tmp[i][0]);
                 else if (double.TryParse(tmp[i].ToString(), out _))
                     stack.Push(tmp[i].ToString());
-            }
-            while (stack.Count != 1)
+            }*/
+            return Convert.ToDouble(tmp[0]);
+        }
+        private static string calcSimple(string value2, string value1, char op)
+        {
+            string result = "";
+            switch (op)
             {
-                value2 = stack.Pop();
-                value1 = stack.Pop();
-
-                switch (operators.Pop())
-                {
-                    case '+':
-                        result = (Convert.ToDouble(value1) + Convert.ToDouble(value2)).ToString();
-                        break;
-                    case '-':
-                        result = (Convert.ToDouble(value1) - Convert.ToDouble(value2)).ToString();
-                        break;
-                    case '*':
-                        result = (Convert.ToDouble(value1) * Convert.ToDouble(value2)).ToString();
-                        break;
-                    case '/':
-                        result = (Convert.ToDouble(value2) / Convert.ToDouble(value1)).ToString();
-                        break;
-                }
-                //stack = new Queue<string>(stack.Reverse());
-                stack.Push(result);
-                //stack = new Queue<string>(stack.Reverse());
+                case '+':
+                    result = (Convert.ToDouble(value1) + Convert.ToDouble(value2)).ToString();
+                    break;
+                case '-':
+                    result = (Convert.ToDouble(value1) - Convert.ToDouble(value2)).ToString();
+                    break;
+                case '*':
+                    result = (Convert.ToDouble(value1) * Convert.ToDouble(value2)).ToString();
+                    break;
+                case '/':
+                    result = (Convert.ToDouble(value2) / Convert.ToDouble(value1)).ToString();
+                    break;
+                case '^':
+                    result = Math.Pow(Convert.ToDouble(value2), Convert.ToDouble(value1)).ToString();
+                    break;
             }
-            return Convert.ToDouble(stack.Pop());
+            return result;
         }
 
         #region Conversions
