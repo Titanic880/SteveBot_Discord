@@ -31,7 +31,8 @@ namespace SteveBot.Modules
                     if (placeholder != "")
                     {
                         tmp.Add(placeholder);
-                        tmp.Add(ops[2].ToString());
+                        placeholder = "";
+                        tmp.Add('*'.ToString());
                     }
                     continue;
                 }
