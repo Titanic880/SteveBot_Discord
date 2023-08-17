@@ -628,11 +628,11 @@ namespace SteveBot.Modules
             await ReplyAsync(embed: embed);
         }
         [Command("RSritual")]
-        public async Task RSRitualMoney(string Data)
+        public async Task RSRitualMoney(string input)
         {
             RSJson rsf = GetRSFile();
             string msg = "Setup Cost: ";
-            switch (Data)
+            switch (input)
             {
                case "lplasm":
                     msg += rsf.RitualSetup_Cost(RS3Rituals.LesNecro);
@@ -687,6 +687,7 @@ namespace SteveBot.Modules
         [Command("RSAlteration")]
         public async Task RSAlteration(string input, int amount = 1)
         {
+            input = input.ToLower();
             RSJson rsf = GetRSFile();
             RS3Glyphs glyph;
             switch (input)
@@ -739,7 +740,29 @@ namespace SteveBot.Modules
         #endregion Runescape
 
         #region Payday
-        
+        [Command("pd2Help")]
+        public async Task PD2Help()
+        {
+            EmbedBuilder EmbedBuilder = new EmbedBuilder()
+.WithTitle($"Command prefix is '{BotProgram.PrefixChar}' (Commands are not case sensitive)")
+.WithDescription("pd2rando <setting> (only supports all currently)"
+)
+.WithCurrentTimestamp();
+            Embed embed = EmbedBuilder.Build();
+            await ReplyAsync(embed: embed);
+        }
+        [Command("pd2Rando")]
+        public async Task PD2Randomize(string input = "all")
+        {
+            input = input.ToLower();
+            switch (input) {
+                case "all":
+                    Content.Payday.Randomizer.
+                    break;
+            }
+
+
+        }
         #endregion Payday
 
         #region Call of Duty

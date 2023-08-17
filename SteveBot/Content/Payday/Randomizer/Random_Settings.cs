@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace PD2RandomizerData
+namespace Content.Payday.Randomizer
 {
     public static class Random_Settings
     {

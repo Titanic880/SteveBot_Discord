@@ -1,4 +1,4 @@
-﻿namespace PD2RandomizerData
+﻿namespace Content.Payday.Randomizer
 {
     public static class Generic_Data
     {
@@ -115,8 +115,4 @@
             "DeathSentence"
         };
     }
-    public partial class string 
-        {
-
-        }
 }

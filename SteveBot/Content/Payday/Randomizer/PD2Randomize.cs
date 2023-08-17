@@ -1,8 +1,8 @@
-﻿using static PD2RandomizerData.Random_Settings;
-using static PD2RandomizerData.Generic_Data;
+﻿using static Content.Payday.Randomizer.Random_Settings;
+using static Content.Payday.Randomizer.Generic_Data;
 using System;
 
-namespace PD2RandomizerData
+namespace Content.Payday.Randomizer
 {
     public static class PD2Randomize
     {

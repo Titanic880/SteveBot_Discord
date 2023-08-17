@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PD2RandomizerData
+namespace Content.Payday.Randomizer
 {
     public static class PD2DataFile
     {
