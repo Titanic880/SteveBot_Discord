@@ -85,27 +85,15 @@ namespace SteveBot.Modules
                     value1 = tmp[index + 1];
                     value2 = tmp[index - 1];
 
-                    tmp[index] = calcSimple(value2,value1,op);
+                    tmp[index] = Calcsimple(value2,value1,op);
                     //Clean up Left over values
                     tmp.RemoveAt(index + 1);
                     tmp.RemoveAt(index - 1);
                 }
             }
-
-
-
-            ///NEEDS TO BE REWRITTEN FOR A PEMDAS COMPLIANT SYSTEM
-            /*Stack<string> stack = new Stack<string>();
-            Stack<char> operators = new Stack<char>();
-            for (int i = tmp.Count - 1; i != -1; i--)
-            {
-                if (ops.Contains(tmp[i][0])) operators.Push(tmp[i][0]);
-                else if (double.TryParse(tmp[i].ToString(), out _))
-                    stack.Push(tmp[i].ToString());
-            }*/
             return Convert.ToDouble(tmp[0]);
         }
-        private static string calcSimple(string value2, string value1, char op)
+        private static string Calcsimple(string value2, string value1, char op)
         {
             string result = "";
             switch (op)
