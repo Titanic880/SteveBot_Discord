@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System;
 
+using SteveBot.Content.Payday.Randomizer;
 using SteveBot.Content.Runescape;
-using Content.Payday.Randomizer;
 
 namespace SteveBot.Modules
 {
@@ -32,8 +32,8 @@ namespace SteveBot.Modules
                         "\nunban: unban <User> <Comment>" +
                         "\nkick : kick <User> <Comment>" + "" +*/
                         "\nlinking : Info list for links!" +
-                        "\nblackjack : WIP" +
-                        "\nmath : Accepts an equation and will output a single number! (comma seperated PostNotation)" +
+                        "\nblackjack Autoplay x: will play x games of blackjack" +
+                        "\nmath : Accepts an equation and will calculate using PEDMAS" +
                         "\ncalculator : Calculator Help")
                     .WithCurrentTimestamp();
             Embed embed = EmbedBuilder.Build();
@@ -55,11 +55,6 @@ namespace SteveBot.Modules
         .WithCurrentTimestamp();
             Embed embed = EmbedBuilder.Build();
             await ReplyAsync(embed: embed);
-        }
-        [Command("blackjack")]
-        public async Task BJ()
-        {
-            await ReplyAsync("Under Development");
         }
         [Command("linking")]
         public async Task Linking()
@@ -168,57 +163,8 @@ namespace SteveBot.Modules
         [Command("test")]
         public async Task Test()
         {
-
-            await ReplyAsync("");
+            await ReplyAsync("twas but a test!");
         }
-        [Command("Tower")]
-        public async Task Tower()
-        {
-            string desc = @"Many try and fail to climb\nWill you succeed?\nChoose your class!"
-                          + "\n1.) Warrior"
-                          + "\n2.) Ranger"
-                          + "\n3.) The Nothing";
-            EmbedBuilder EmbedBuilder = new EmbedBuilder()
-                .WithTitle("Welcome to the Tower!")
-                .WithDescription(desc)
-                .WithCurrentTimestamp();
-            Embed embed = EmbedBuilder.Build();
-            await ReplyAsync(embed: embed);
-        }
-        /*
-        [Command("Tower Start")]
-        public async Task StartTower(int Startclass, SocketUser user = null)
-        {
-            bool inlist = false;
-            string desc = "Many try and fail to climb\nWill you succeed?\nChoose your class!" +
-                "\n1.) Warrior" +
-                "\n2.) Ranger" +
-                "\n3.) The Nothing";
-            for (int i = 0; i > towerplayers.Count; i++)
-            {
-                if (user.Id == towerplayers[i].playerID)
-                {
-                    desc = "Welcome back\nShall we begin?";
-                    inlist = true;
-                }
-            }
-            if (!inlist)
-            {
-                Towerplayers tp = new Towerplayers();
-                tp.playerID = user.Id;
-                TheTower.main start = new TheTower.main(user.Id, Startclass);
-                towerplayers.Add(tp);
-            }
-
-
-            EmbedBuilder EmbedBuilder = new EmbedBuilder()
-               .WithTitle("Welcome to the Tower!")
-               .WithDescription(desc)
-               .WithCurrentTimestamp();
-            Embed embed = EmbedBuilder.Build();
-            await ReplyAsync(embed: embed);
-        }*/
-
         #endregion TEST
         #region Bans
         [Command("ban")]
@@ -342,15 +288,6 @@ namespace SteveBot.Modules
         }
         #endregion Calc
         #region BlackJack
-        [Command("blackjack deal")]
-        public async Task BlackJackDeal(IGuildUser user = null)
-        {
-            if (user.IsBot)
-                return;
-
-            await ReplyAsync("This does nothing");
-        }
-
         [Command("blackjack Autoplay")]
         public async Task BJAutoPlay(int games = 1)
         {
@@ -375,7 +312,7 @@ namespace SteveBot.Modules
                 if (games == 1)
                 {
                     BlackJack.Blackjack bj = new BlackJack.Blackjack();
-                    BlackJack.Player winner = bj.playgame();
+                    BlackJack.Player winner = bj.PlayGame();
                     output = bj.Win();
                 }
                 else
@@ -389,7 +326,7 @@ namespace SteveBot.Modules
                     for (int i = 0; i < games; i++)
                     {
                         BlackJack.Blackjack game = new BlackJack.Blackjack();
-                        BlackJack.Player winner = game.playgame();
+                        BlackJack.Player winner = game.PlayGame();
                         Console.WriteLine(i + "/" + games);
                         if (winner.IsDealer)
                             output1[0]++;
@@ -473,7 +410,7 @@ namespace SteveBot.Modules
         {
             await ReplyAsync("Command under construction, Check back later!");
             return;
-
+            /*
             DateTime CompTime = DateTime.UtcNow;
             RSJson rsf = GetRSFile();
 
@@ -507,7 +444,7 @@ namespace SteveBot.Modules
             {
                 CommandFunctions.ErrorMessages(e.Message);
                 await ReplyAsync("A problem has occoured when fetching new data.");
-            }
+            }*/
         }
         [Command("rshelp")]
         public async Task RShelp()

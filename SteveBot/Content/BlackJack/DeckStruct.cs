@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System;
 
 namespace SteveBot.Modules.BlackJack
 {
     class DeckStruct
     {
         private readonly List<Card> Deck = new List<Card>();
-        private int DeckLeft { get { return Deck.Count; } }
-
         public DeckStruct()
         {
             for (int i = 0; i < 13; i++)
@@ -37,7 +32,6 @@ namespace SteveBot.Modules.BlackJack
             {
                 num1 = rand.Next(0, 52);
                 num2 = rand.Next(0, 52);
-                //Stashing the old card in memory
                 (Deck[num2], Deck[num1]) = (Deck[num1], Deck[num2]);
             }
         }

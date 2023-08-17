@@ -16,7 +16,7 @@ namespace SteveBot.Modules
 
         public static void UpdateLinks(List<string> strlst = null)
         {
-            if(strlst == null) { strlst = new List<string>(File.ReadAllLines("Files/Links.txt")); }
+            if(strlst == null) { strlst = new List<string>(File.ReadAllLines(linkPath)); }
             //Checks to see if list is empty, if so output console command
             if (strlst.Count == 0)
             {
@@ -47,14 +47,14 @@ namespace SteveBot.Modules
         {
             //Writes to file
             StreamWriter sW = File.AppendText(usercommandsPath);
-            sW.WriteLine($"{message.Content}, {message.Author}, {message.CreatedAt.DateTime}");
+            sW.WriteLine($"{message.CreatedAt.DateTime}:{message.Author}: {message.Content}");
             sW.Close();
         }
         public static void UserMessages(Discord.WebSocket.SocketUserMessage message)
         {
             //Writes to file
             StreamWriter sW = File.AppendText(usermessagesPath);
-            sW.WriteLine($"{message.Content}, {message.Author}, {message.CreatedAt.DateTime}");
+            sW.WriteLine($"{message.CreatedAt.DateTime}:{message.Author}: {message.Content}");
             sW.Close();
         }
         public static void ErrorMessages(string Error)

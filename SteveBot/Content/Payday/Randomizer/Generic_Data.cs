@@ -1,4 +1,4 @@
-﻿namespace Content.Payday.Randomizer
+﻿namespace SteveBot.Content.Payday.Randomizer
 {
     public static class Generic_Data
     {

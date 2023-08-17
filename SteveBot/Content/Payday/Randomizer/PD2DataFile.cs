@@ -1,8 +1,8 @@
-﻿using static Content.Payday.Randomizer.Generic_Data;
+﻿using static SteveBot.Content.Payday.Randomizer.Generic_Data;
 using System.Linq;
 using System;
 
-namespace Content.Payday.Randomizer
+namespace SteveBot.Content.Payday.Randomizer
 {
     public class PD2DataFile
     {

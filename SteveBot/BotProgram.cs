@@ -48,10 +48,16 @@ namespace SteveBot
             //logs the bot into discord
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
-
+            
             await Task.Delay(Timeout.Infinite);
         }
-
+        /// <summary>
+        /// To Fix hot unloading/loading while debugging
+        /// </summary>
+        ~BotProgram()
+        {
+          _client.LogoutAsync();
+        }
         //outputs to Console
         private Task Client_Log(LogMessage arg)
         {

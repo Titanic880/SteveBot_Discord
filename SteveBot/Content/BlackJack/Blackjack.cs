@@ -1,6 +1,4 @@
-﻿using Discord;
-using Discord.Commands;
-
+﻿using Discord.Commands;
 
 namespace SteveBot.Modules.BlackJack
 {
@@ -18,21 +16,18 @@ namespace SteveBot.Modules.BlackJack
 
         public Card(int arg, CardSuit suit)
         {
-            this.Value = arg;
-            this.Suit = suit;
+            Value = arg;
+            Suit = suit;
         }
     }
     public class Blackjack : ModuleBase<SocketCommandContext>
     {
-        Player dealer = new Player(true);
-        Player player = new Player();
+        readonly Player dealer = new Player(true);
+        readonly Player player = new Player();
         private string msg = "PLACEHOLDER";
-        public Blackjack()
-        {
-
-        }
+        public Blackjack() { }
         //Automatically plays a game
-        public Player playgame()
+        public Player PlayGame()
         {
             DeckStruct deck = new DeckStruct();
             //First card per player
@@ -75,12 +70,9 @@ namespace SteveBot.Modules.BlackJack
                     return player;
                 }
             }
-
         }
-        public string Win()
-        {
-            return msg;
-        }
+        public string Win() => msg;
+        
 
     }
 }
