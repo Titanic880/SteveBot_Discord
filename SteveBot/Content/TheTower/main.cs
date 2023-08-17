@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SteveBot.Modules.TheTower
 {
-    class main
+    class Towermain
     {
         public ulong UserID { get; private set; } 
-        public main(ulong userid, int startclass)
+        public Towermain(ulong userid, int startclass)
         {
-            Player player = new Player(true, 1);
-            player.SetClass(interfaces.Classes.Ranger);
+            Player player = new(true, 1);
+            player.SetClass(Interfaces.Classes.Ranger);
             UserID = userid;
 
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SteveBot.Modules.TheTower
 {
-    static class interfaces
+    static class Interfaces
     {
         public enum Classes
         {
@@ -17,15 +17,15 @@ namespace SteveBot.Modules.TheTower
             Goblin,
             Human
         }
-        public interface player
+        public interface iPlayer
         {
-            string classtype { get; }
+            string Classtype { get; }
             bool IsPlayer { get; }
             int Health { get; }
             int Strength { get; }
             int Stamina { get; }
             int[] Potions { get; }
-            int modifier { get; }
+            int Modifier { get; }
             int Level { get; }
             int Experience { get; }
             int ExperienceLevel { get; }
@@ -33,14 +33,14 @@ namespace SteveBot.Modules.TheTower
             void InitilizePlayer(bool player);
             string SetClass(Classes classnum);
             //bool isPlayer();
-            int DealDamage(player opponent);
+            int DealDamage(Player opponent);
             int TakeDamage(int damage);
             int StaminaIncrease(int amount, bool increase);
             int DrinkPotion(int potionlocation);
             int SetLevel();
-            int SetExperience(player opponent);
+            int SetExperience(Player opponent);
             int SetExperienceMax(int level);
-            int ModifierSet(player opponent);
+            int ModifierSet(Player opponent);
         }
 
     }

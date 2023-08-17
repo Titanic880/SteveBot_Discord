@@ -8,8 +8,6 @@ using System;
 using SteveBot.Content.Payday.Randomizer;
 using SteveBot.Content.Runescape;
 using Discord.WebSocket;
-using System.Windows.Forms;
-using System.Runtime.Remoting.Contexts;
 
 namespace SteveBot.Modules
 {
@@ -116,7 +114,7 @@ namespace SteveBot.Modules
         [Command("addlink")]
         public async Task AddLink(string link)
         {
-            string linktest = link.Substring(0, 5);
+            string linktest = link[..5];
             if (linktest.ToLower() != "https")
             {
                 await ReplyAsync("Please provide a link with https at the beginning");
@@ -179,8 +177,7 @@ namespace SteveBot.Modules
                 await ReplyAsync("Please specify a user!");
                 return;
             }
-            if (reason == null)
-                reason = "N/A";
+            reason ??= "N/A";
 
             await Context.Guild.AddBanAsync(user, 1, reason);
 
@@ -204,8 +201,7 @@ namespace SteveBot.Modules
                 await ReplyAsync("Please specify a user!");
                 return;
             }
-            if (reason == null)
-                reason = "N/A";
+            reason ??= "N/A";
 
             await Context.Guild.RemoveBanAsync(user);
 
@@ -228,8 +224,7 @@ namespace SteveBot.Modules
                 await ReplyAsync("Please specify a user!");
                 return;
             }
-            if (reason == null)
-                reason = "N/A";
+            reason ??= "N/A";
 
             await Context.Guild.AddBanAsync(user, 0, reason);
             await Context.Guild.RemoveBanAsync(user);
@@ -314,13 +309,13 @@ namespace SteveBot.Modules
                 string output = "";
                 if (games == 1)
                 {
-                    BlackJack.Blackjack bj = new BlackJack.Blackjack();
+                    BlackJack.Blackjack bj = new();
                     BlackJack.Player winner = bj.PlayGame();
                     output = bj.Win();
                 }
                 else
                 {
-                    System.Timers.Timer Time = new System.Timers.Timer(1000);
+                    System.Timers.Timer Time = new(1000);
                     Time.Elapsed += Time_Elapsed;
                     int gamesplayed = games;
                     int[] output1 = new int[] { 0, 0 };
@@ -328,7 +323,7 @@ namespace SteveBot.Modules
                     Time.Start();
                     for (int i = 0; i < games; i++)
                     {
-                        BlackJack.Blackjack game = new BlackJack.Blackjack();
+                        BlackJack.Blackjack game = new();
                         BlackJack.Player winner = game.PlayGame();
                         Console.WriteLine(i + "/" + games);
                         if (winner.IsDealer)
@@ -384,22 +379,20 @@ namespace SteveBot.Modules
         /// Gets local File contents
         /// </summary>
         /// <returns></returns>
-        private RSJson GetRSFile() {
+        private static RSJson GetRSFile() {
             string FileContents = "";
-            using (StreamReader sr = new StreamReader("Files/Runescape.json"))
+            using (StreamReader sr = new("Files/Runescape.json"))
             {
                 FileContents = sr.ReadToEndAsync().Result;
             }
             return Newtonsoft.Json.JsonConvert.DeserializeObject<RSJson>(FileContents);
         }
-        private bool SetRSFile(RSJson json)
+        private static bool SetRSFile(RSJson json)
         {
             try
             {
-                using (StreamWriter sw = new StreamWriter("Files/Runescape.json"))
-                {
-                    sw.WriteAsync(Newtonsoft.Json.JsonConvert.SerializeObject(json, Newtonsoft.Json.Formatting.Indented));
-                }
+                using StreamWriter sw = new("Files/Runescape.json");
+                sw.WriteAsync(Newtonsoft.Json.JsonConvert.SerializeObject(json, Newtonsoft.Json.Formatting.Indented));
                 return true;
             }
             catch (Exception e)
@@ -697,7 +690,7 @@ namespace SteveBot.Modules
         public async Task PD2Randomize(string input = "all")
         {
             input = input.ToLower();
-            PD2DataFile pd2data = new PD2DataFile();
+            PD2DataFile pd2data = new();
             switch (input) {
                 case "all":
                     pd2data.RandomizeAll();
@@ -739,7 +732,7 @@ namespace SteveBot.Modules
         public async Task CODCWRandomizer(string input = "all")
         {
             input = input.ToLower();
-            Content.Call_of_Duty.Randomizer.ZombRandLib randlib = new Content.Call_of_Duty.Randomizer.ZombRandLib();
+            Content.Call_of_Duty.Randomizer.ZombRandLib randlib = new();
 
             randlib.TrueRandomize();
 

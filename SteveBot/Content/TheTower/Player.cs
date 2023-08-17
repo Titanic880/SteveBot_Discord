@@ -1,19 +1,19 @@
 ﻿using System;
-using static SteveBot.Modules.TheTower.interfaces;
+using static SteveBot.Modules.TheTower.Interfaces;
 
 namespace SteveBot.Modules.TheTower
 {
     class Player
     {
         
-        enum potions
+        enum Potion_Types
         {
             Health,
             Strength,
             Stamina,
             Mystery
         }
-        public string classtype { get; private set; }
+        public string Classtype { get; private set; }
 
         public int Strength { get; private set; }
 
@@ -25,7 +25,7 @@ namespace SteveBot.Modules.TheTower
 
         public int[] Potions { get; private set; }
 
-        public double modifier { get; private set; }
+        public double Modifier { get; private set; }
 
         public int Level { get; private set; }
 
@@ -41,7 +41,7 @@ namespace SteveBot.Modules.TheTower
 
             if (IsPlayer)
             {
-                modifier = 1;
+                Modifier = 1;
                 SetClass((Classes)Class);
                 Stamina = 50;
                 Potions = new int[5];
@@ -52,14 +52,14 @@ namespace SteveBot.Modules.TheTower
             }
         }
 
-        public int DealDamage(player opponent)
+        public int DealDamage(Player opponent)
         {
-            int damage = opponent.Strength * opponent.modifier;
+            int damage = Convert.ToInt32(Math.Round(opponent.Strength * opponent.Modifier));
             Health -= damage;
             return damage;
         }
 
-        public int DrinkPotion(int potionlocation)
+        public int DrinkPotion(int Potionlocation)
         {
             //Potions[potionlocation];
 
@@ -69,8 +69,8 @@ namespace SteveBot.Modules.TheTower
         //To be used by the enemy class
         public int ModifierSet(int level)
         {
-            modifier = level * 2;
-            return Convert.ToInt32(Math.Round(modifier));
+            Modifier = level * 2;
+            return Convert.ToInt32(Math.Round(Modifier));
         }
 
         public string SetClass(Classes classnum)
@@ -80,19 +80,19 @@ namespace SteveBot.Modules.TheTower
                 switch (classnum)
                 {
                     case Classes.Warrior:
-                        classtype = "Warrior";
+                        Classtype = "Warrior";
                         Health = 100;
                         break;
                     case Classes.Ranger:
-                        classtype = "Ranger"; 
+                        Classtype = "Ranger"; 
                         Health = 75;
                         break;
                     case Classes.Mage:
-                        classtype = "Mage";
+                        Classtype = "Mage";
                         Health = 50;
                         break;
                 }
-                return classtype;
+                return Classtype;
             }
             else
             {
@@ -102,20 +102,20 @@ namespace SteveBot.Modules.TheTower
                 switch (classnum)
                 {
                     case Classes.Orc:
-                        classtype = "Orc";
+                        Classtype = "Orc";
                         break;
                     case Classes.Goblin:
-                        classtype = "Goblin";
+                        Classtype = "Goblin";
                         break;
                     case Classes.Human:
-                        classtype = "Human";
+                        Classtype = "Human";
                         break;
                 }
-                return classtype;
+                return Classtype;
             }
         }
 
-        public void SetExperience(player opponent)
+        public void SetExperience(Player opponent)
         {
             Experience += opponent.Health/3;
         }
@@ -140,7 +140,7 @@ namespace SteveBot.Modules.TheTower
                     Health += 5;
                     break;
                 case 3:
-                    modifier += 0.1;
+                    Modifier += 0.1;
                     break;
             }
             Level++;

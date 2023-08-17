@@ -123,16 +123,12 @@ namespace SteveBot
                 //IGuildChannel bots;   //TODO: Implement channel restriction
 
                 //Stores user message and initilizes message position
-                if (!(arg is SocketUserMessage message))
+                if (arg is not SocketUserMessage message)
                     return;
                 //checks to see if the user is a bot
                 else
                     //Checks for prefix or specified passthrough commands
                     if (message.HasCharPrefix(PrefixChar, ref argPos)
-                     //|| message.Content.ToLower() == "help"
-                     //|| message.Content.ToLower() == "linking"
-                     || message.Content.ToLower() == "calculator"
-                     || message.Content.ToLower() == "blackjack"
                      || message.Content.ToLower() == "k")
                 {
                     //Saves user Input to a debug file for later inspection
@@ -140,7 +136,7 @@ namespace SteveBot
                     if (message.Author.IsBot)
                         return;
                     //generates an object from the user message
-                    SocketCommandContext context = new SocketCommandContext(_client, message);
+                    SocketCommandContext context = new(_client, message);
 
                     //Attempts to run the command and outputs accordingly
                     IResult result = await _commands.ExecuteAsync(context, argPos, _services);
