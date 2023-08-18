@@ -14,9 +14,22 @@ using SteveBot.Modules;
 
 namespace SteveBot
 {
+
     internal class BotProgram
     {
         public const char PrefixChar = '$';
+        public static readonly Emoji[] emojis = new Emoji[]
+    {
+            "1️⃣" ,
+            "2️⃣" ,
+            "3️⃣" ,
+            "4️⃣" ,
+            "5️⃣" ,
+            "6️⃣" ,
+            "7️⃣" ,
+            "8️⃣" ,
+            "✅"
+    };
 
         private DiscordSocketClient _client;
         private CommandService _commands;
@@ -76,7 +89,31 @@ namespace SteveBot
             _client.MessageReceived += HandleCommandAsync;
             //_client.SlashCommandExecuted += HandleSlashAsync;
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+            _client.ReactionAdded += HandleReactionAdd;
+            _client.ReactionRemoved += HandleReactionRemove;
         }
+
+        private Task HandleReactionRemove(Cacheable<IUserMessage, ulong> msgCache, Cacheable<IMessageChannel, ulong> msgChannel, SocketReaction reaction)
+        {
+            _ = Task.Run(async () =>
+            {
+                if (reaction.User.Value.IsBot) return;
+
+            });
+            return Task.CompletedTask;
+        }
+
+        private Task HandleReactionAdd(Cacheable<IUserMessage, ulong> msgCache, Cacheable<IMessageChannel, ulong> msgChannel, SocketReaction reaction)
+        {
+            _ = Task.Run(async () =>
+            {
+                if (reaction.User.Value.IsBot) return;
+                var message = await msgCache.GetOrDownloadAsync();
+                var debug = message.Reactions;
+            });
+            return Task.CompletedTask;
+        }
+
         //Command Handler
         private Task HandleCommandAsync(SocketMessage arg)
         {
@@ -115,14 +152,6 @@ namespace SteveBot
                     if (result.Error.Equals(CommandError.UnmetPrecondition))
                         await message.Channel.SendMessageAsync(result.ErrorReason);
                 }
-                //if something fails the Prefix check it just returns
-                /*  LOGS EVERY MESSAGE BOT CAN SEE, Not recommended
-                else
-                {
-                    if (!message.Author.IsBot)
-                        CommandFunctions.UserMessages(message);
-                    return;
-                }*/
             });
             return Task.CompletedTask;
         }

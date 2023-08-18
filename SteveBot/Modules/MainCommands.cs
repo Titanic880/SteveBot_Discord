@@ -7,6 +7,9 @@ using System;
 
 using SteveBot.Content.Payday.Randomizer;
 using SteveBot.Content.Runescape;
+using Discord.WebSocket;
+using System.Windows.Forms;
+using System.Runtime.Remoting.Contexts;
 
 namespace SteveBot.Modules
 {
@@ -710,7 +713,27 @@ namespace SteveBot.Modules
             await ReplyAsync(embed: embed);
         }
         #endregion Payday
-
+        
+        [Command("PD2RandReact")]
+        public async Task PD2Rand()
+        {
+            EmbedBuilder EmbedBuilder = new EmbedBuilder()
+                .WithTitle($"Payday 2 Randomizer")
+                .WithDescription("React with the provided to change settings:" +
+                $"\n{BotProgram.emojis[0]} Randomize Perk Deck" +
+                $"\n{BotProgram.emojis[1]} Randomize Throwable" +
+                $"\n{BotProgram.emojis[2]} Randomize Primary" +
+                $"\n{BotProgram.emojis[3]} Randomize Secondary" +
+                $"\n{BotProgram.emojis[4]} Randomize Melee" +
+                $"\n{BotProgram.emojis[5]} Randomize Deployable" +
+                $"\n{BotProgram.emojis[6]} Randomize Armor" +
+                $"\n{BotProgram.emojis[7]} Randomize Difficulty" + 
+                $"\n{BotProgram.emojis[8]} Randomize!"
+               ).WithCurrentTimestamp();
+            Embed embed = EmbedBuilder.Build();
+            var item = await ReplyAsync(embed: embed);
+            await item.AddReactionsAsync(BotProgram.emojis);
+        }
         #region Call of Duty
         [Command("CODCWRand")]
         public async Task CODCWRandomizer(string input = "all")
