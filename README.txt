@@ -10,4 +10,4 @@ Not my fault if you brick your discord blah blah blah....
 
 If there's an issue that already hasn't been brought up on github then make an issue report
 
-GitHub page : https://github.com/Titanic880/ITEC230_SteveBot
+GitHub page : https://github.com/Titanic880/SteveBot_Discord
